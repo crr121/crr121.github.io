@@ -87,7 +87,7 @@
 <meta property="og:description" content="使用hexo搭建next主题">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-08-28T15:51:49.000Z">
-<meta property="article:modified_time" content="2021-08-29T04:30:30.436Z">
+<meta property="article:modified_time" content="2021-08-29T04:35:28.405Z">
 <meta property="article:author" content="Joy">
 <meta property="article:tag" content="hexo">
 <meta name="twitter:card" content="summary">
@@ -356,74 +356,79 @@
       
 
       
-        <h1 id="初始化blog"><a href="#初始化blog" class="headerlink" title="初始化blog"></a>初始化blog</h1><ul>
-<li><p>本地创建blog文件夹</p>
-</li>
-<li><p>执行初始化</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure></li>
-<li><p>安装部署工具</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></li>
-<li><p>修改配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:crr121/crr121.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure></li>
-<li><p>编译&amp;部署</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="next主题配置"><a href="#next主题配置" class="headerlink" title="next主题配置"></a>next主题配置</h1><p><a target="_blank" rel="noopener" href="https://theme-next.iissnan.com/getting-started.html">https://theme-next.iissnan.com/getting-started.html</a></p>
+        <h1>初始化blog</h1>
 <ul>
-<li><p>clone</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure></li>
-<li><p>启用主题</p>
+<li>
+<p>本地创建blog文件夹</p>
+</li>
+<li>
+<p>执行初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装部署工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:crr121/crr121.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>编译&amp;部署</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1>next主题配置</h1>
+<p><a target="_blank" rel="noopener" href="https://theme-next.iissnan.com/getting-started.html">https://theme-next.iissnan.com/getting-started.html</a></p>
+<ul>
+<li>
+<p>clone</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>启用主题</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>我们最好使用 <code>hexo clean</code> 来清除 Hexo 的缓存。</p>
 </blockquote>
 </li>
-<li><p>修改主题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br></pre></td></tr></table></figure></li>
+<li>
+<p>修改主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<h1 id="设置语言"><a href="#设置语言" class="headerlink" title="设置语言"></a>设置语言</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br></pre></td></tr></table></figure>
-
-<h1 id="设置站点名称"><a href="#设置站点名称" class="headerlink" title="设置站点名称"></a>设置站点名称</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 小秋的博客</span><br><span class="line">subtitle: &#x27;&#x27;</span><br><span class="line">description: &#x27;&#x27;</span><br><span class="line">keywords:</span><br><span class="line">author: Joy</span><br><span class="line">language: en</span><br><span class="line">timezone: &#x27;&#x27;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="设置菜单"><a href="#设置菜单" class="headerlink" title="设置菜单"></a>设置菜单</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
-
+<h1>设置语言</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br></pre></td></tr></table></figure>
+<h1>设置站点名称</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 小秋的博客</span><br><span class="line">subtitle: &#x27;&#x27;</span><br><span class="line">description: &#x27;&#x27;</span><br><span class="line">keywords:</span><br><span class="line">author: Joy</span><br><span class="line">language: en</span><br><span class="line">timezone: &#x27;&#x27;</span><br></pre></td></tr></table></figure>
+<h1>设置菜单</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
 <p><code>||</code>后面的表示图标，使用<code>Font Awesome</code>图标名字</p>
 <p>设置完菜单但是没有页面的话点击菜单就会报错了。创建刚才建了菜单的页面执行以下命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line">hexo new page about</span><br><span class="line">hexo new page archives</span><br></pre></td></tr></table></figure>
-
 <p>然后在<code>source</code>目录下就会生成对应的文件夹，每个文件夹里都有一个<code>index.md</code>，打开将页面的<code>type</code>设置为相应的内容。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: 标签</span><br><span class="line">date: </span><br><span class="line">type: &quot;tags&quot; # 或者 &quot;categories&quot;/&quot;about&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
 <p><code>comments</code>是关闭这个页面的评论功能用的，评论后面会提到。</p>
-<h1 id="设置首页不显示全文"><a href="#设置首页不显示全文" class="headerlink" title="设置首页不显示全文"></a>设置首页不显示全文</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 100</span><br></pre></td></tr></table></figure>
-
+<h1>设置首页不显示全文</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 100</span><br></pre></td></tr></table></figure>
 <p>默认首页的文章会显示全文，在主题配置文件设置<code>auto_excerpt</code>为<code>true</code>再设置长度就会只显示你设置的字数了。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 100</span><br></pre></td></tr></table></figure>
-
-
-
 <p>但是，官方是不推荐这种做法的，我这里用的方法是发表的文章的开头加上<code>description</code>，这样，文章就会显示这个摘要：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">title: # 文章标题</span><br><span class="line">author: # 作者</span><br><span class="line">tags: </span><br><span class="line">  - Hexo</span><br><span class="line">  - Next</span><br><span class="line">categories: </span><br><span class="line">  - Hexo</span><br><span class="line">  - Next</span><br><span class="line">description: # 描述，首页文章显示的摘要</span><br><span class="line">date: </span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-
-
 <p>这里的<code>tags</code>和<code>categories</code>就是给文章加上标签和分类，两者的区别就是<code>categories</code>是有层级的，像上面那样分类里<code>Next</code>就是<code>Hexo</code>的子类，Hexo是不支持指定多个同级分类的。</p>
-<h1 id="bug"><a href="#bug" class="headerlink" title="bug"></a>bug</h1><h2 id="启用主题后报错"><a href="#启用主题后报错" class="headerlink" title="启用主题后报错"></a>启用主题后报错</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &#x27;_layout.swig&#x27; %&#125; &#123;% import &#x27;_macro/post.swig&#x27; as post_template %&#125; &#123;% import &#x27;_macro/sidebar.swig&#x27; as sidebar_template %&#125; &#123;% block title %&#125;&#123;&#123; config.title &#125;&#125;&#123;% if theme.index_with_subtitle and config.subtitle %&#125; - &#123;&#123;config.subtitle &#125;&#125;&#123;% endif %&#125;&#123;% endblock %&#125; &#123;% block page_class %&#125; &#123;% if is_home() %&#125;page-home&#123;% endif -%&#125; &#123;% endblock %&#125; &#123;% block content %&#125;</span><br><span class="line">&#123;% for post in page.posts %&#125; &#123;&#123; post_template.render(post, true) &#125;&#125; &#123;% endfor %&#125;</span><br><span class="line">&#123;% include &#x27;_partials/pagination.swig&#x27; %&#125; &#123;% endblock %&#125; &#123;% block sidebar %&#125; &#123;&#123; sidebar_template.render(false) &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
-
+<h1>bug</h1>
+<h2 id="启用主题后报错">启用主题后报错</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &#x27;_layout.swig&#x27; %&#125; &#123;% import &#x27;_macro/post.swig&#x27; as post_template %&#125; &#123;% import &#x27;_macro/sidebar.swig&#x27; as sidebar_template %&#125; &#123;% block title %&#125;&#123;&#123; config.title &#125;&#125;&#123;% if theme.index_with_subtitle and config.subtitle %&#125; - &#123;&#123;config.subtitle &#125;&#125;&#123;% endif %&#125;&#123;% endblock %&#125; &#123;% block page_class %&#125; &#123;% if is_home() %&#125;page-home&#123;% endif -%&#125; &#123;% endblock %&#125; &#123;% block content %&#125;</span><br><span class="line">&#123;% for post in page.posts %&#125; &#123;&#123; post_template.render(post, true) &#125;&#125; &#123;% endfor %&#125;</span><br><span class="line">&#123;% include &#x27;_partials/pagination.swig&#x27; %&#125; &#123;% endblock %&#125; &#123;% block sidebar %&#125; &#123;&#123; sidebar_template.render(false) &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
 <p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-renderer-swig</span><br></pre></td></tr></table></figure>
-
 <p>然后hexo clean清理缓存，hexo g  &amp; hexo d 即可！</p>
-<h2 id="设置菜单，点击报错"><a href="#设置菜单，点击报错" class="headerlink" title="设置菜单，点击报错"></a>设置菜单，点击报错</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /about/%20</span><br></pre></td></tr></table></figure>
-
+<h2 id="设置菜单，点击报错">设置菜单，点击报错</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /about/%20</span><br></pre></td></tr></table></figure>
 <p>去掉//后的空格</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /|| home</span><br><span class="line">  about: /about/|| user</span><br><span class="line">  tags: /tags/|| tags</span><br><span class="line">  categories: /categories/|| th</span><br><span class="line">  archives: /archives/|| archive</span><br><span class="line">  #schedule: /schedule/|| calendar</span><br><span class="line"> #sitemap: /sitemap.xml || sitemap</span><br><span class="line"> #commonweal: /404/ ||heartbeat</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="点击目录不跳转"><a href="#点击目录不跳转" class="headerlink" title="点击目录不跳转"></a>点击目录不跳转</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">post-details.js?v=5.1.4:76 Uncaught TypeError: Cannot read property &#x27;top&#x27; of undefined</span><br><span class="line">    at HTMLAnchorElement.&lt;anonymous&gt; (post-details.js?v=5.1.4:76)</span><br><span class="line">    at HTMLAnchorElement.dispatch (index.js?v=2.1.3:3)</span><br><span class="line">    at HTMLAnchorElement.r.handl</span><br></pre></td></tr></table></figure>
-
+<h2 id="点击目录不跳转">点击目录不跳转</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">post-details.js?v=5.1.4:76 Uncaught TypeError: Cannot read property &#x27;top&#x27; of undefined</span><br><span class="line">    at HTMLAnchorElement.&lt;anonymous&gt; (post-details.js?v=5.1.4:76)</span><br><span class="line">    at HTMLAnchorElement.dispatch (index.js?v=2.1.3:3)</span><br><span class="line">    at HTMLAnchorElement.r.handl</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">卸载 Hexo 默认自带的 Markdown 渲染器</span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line">安装 hexo-renderer-markdown-it 插件</span><br><span class="line"></span><br><span class="line">npm i hexo-renderer-markdown-it --save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -598,7 +603,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96blog"><span class="nav-number">1.</span> <span class="nav-text">初始化blog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">next主题配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text">设置语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%AB%99%E7%82%B9%E5%90%8D%E7%A7%B0"><span class="nav-number">4.</span> <span class="nav-text">设置站点名称</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%8F%9C%E5%8D%95"><span class="nav-number">5.</span> <span class="nav-text">设置菜单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A6%96%E9%A1%B5%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%85%A8%E6%96%87"><span class="nav-number">6.</span> <span class="nav-text">设置首页不显示全文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bug"><span class="nav-number">7.</span> <span class="nav-text">bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E4%B8%BB%E9%A2%98%E5%90%8E%E6%8A%A5%E9%94%99"><span class="nav-number">7.1.</span> <span class="nav-text">启用主题后报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%8F%9C%E5%8D%95%EF%BC%8C%E7%82%B9%E5%87%BB%E6%8A%A5%E9%94%99"><span class="nav-number">7.2.</span> <span class="nav-text">设置菜单，点击报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E5%87%BB%E7%9B%AE%E5%BD%95%E4%B8%8D%E8%B7%B3%E8%BD%AC"><span class="nav-number">7.3.</span> <span class="nav-text">点击目录不跳转</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">初始化blog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">next主题配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">设置语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">设置站点名称</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">设置菜单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">6.</span> <span class="nav-text">设置首页不显示全文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">7.</span> <span class="nav-text">bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E4%B8%BB%E9%A2%98%E5%90%8E%E6%8A%A5%E9%94%99"><span class="nav-number">7.1.</span> <span class="nav-text">启用主题后报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%8F%9C%E5%8D%95%EF%BC%8C%E7%82%B9%E5%87%BB%E6%8A%A5%E9%94%99"><span class="nav-number">7.2.</span> <span class="nav-text">设置菜单，点击报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E5%87%BB%E7%9B%AE%E5%BD%95%E4%B8%8D%E8%B7%B3%E8%BD%AC"><span class="nav-number">7.3.</span> <span class="nav-text">点击目录不跳转</span></a></li></ol></li></ol></div>
             
 
           </div>
