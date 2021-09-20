@@ -259,6 +259,361 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小秋的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/" itemprop="url">redis缓存策略</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-03T18:03:07+08:00">
+                2021-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1>旁路缓存模式</h1>
+<h4 id="3-2-1-category-blacklist的缓存一致性">3.2.1 category blacklist的缓存一致性</h4>
+<p>针对3.2.0中涉及的API的特点，对category blacklist的缓存一致性进行设计。针对category blacklist的缓存场景的特点可以总结如下：</p>
+<ul>
+<li>读多写少(写的频率较低)：category blacklist主要用于在PDP的详情页访问时进行商品类别的黑名单过滤，因此该场景需要扛住大量的访问请求，但是对黑名单的更新主要在admin侧，且更新的频率较低？</li>
+<li>最终一致性：可以容忍在一定的时延内数据出现不一致，此时PDP的详情页命中黑名单的商品仍然展示SPL的分期信息，但最终需达到最终一致性的要求</li>
+<li>数据量不是很大：黑名单的数据并不想订单等数据量庞大</li>
+</ul>
+<h5 id="1-方案一：旁路缓存模式-Cache-Aside-Pattern">1. 方案一：旁路缓存模式(Cache Aside Pattern)</h5>
+<ul>
+<li>核心思想：适用于读多写少的场景，服务端同时维系DB和cache，并且以DB的结果为准。</li>
+</ul>
+<p>​      写：Admin侧更新DB中的category之后，然后清除Redis中的category blacklist缓存（清除所有？）</p>
+<p>​      读：Pricing Center侧进行category过滤时，首先读取Redis, 若cache命中返回数据；</p>
+<p>​         若cache未命中，则访问DB，若读取到数据返回数据，然后放入到cache中，若未读取到数据直接返回。</p>
+<ul>
+<li>
+<p>该方案的缺陷：</p>
+<p>1）首次请求数据一定不在cache中。</p>
+<p>2）写操作比较频繁的话导致cache中的数据会被频繁被删除，从而影响缓存命中率。【这里category blacklist的更新操作主要有后台ops操作，更新频率应该不高？】</p>
+</li>
+<li>
+<p>是否适用category blacklist的缓存</p>
+</li>
+</ul>
+<p>category blacklist的缓存场景为读多写少的场景，因此可采用旁路缓存模式。但由于查询产品分期query_product_instalment_info访问量较大，对QPS的要求较高，因此当cache未命中时，不能直接访问DB。</p>
+<p>实现方式：</p>
+<ul>
+<li>
+<p>通过定时任务来定期的刷新缓存来实现最终一致性，【将过期时间设置较长一点，因为更新频率较低，定时任务的周期也不用过于频繁，从而提高命中率】</p>
+</li>
+<li>
+<p>另外可考虑在数据库中给category设置过期时间?（与Redis的过期时间如何兼容，数据库中过期主动更新？）</p>
+</li>
+</ul>
+<p>另外针对该缓存模式的缺陷可采用以下方式解决：</p>
+<p>1）在大促时，针对热点数据需要考虑提前预热，提前将其放入redis缓存中,以防止大量请求同时访问DB，导致缓存雪崩。</p>
+<p>2）防止在大促期间进行黑名单的更新，降低对缓存命中率的影响。</p>
+<p>3）在该场景下，可以短暂地允许数据库和缓存数据不一致，因此可以给category list加一个较短的过期时间，降低数据不一致的影响（好像与前面有点矛盾，权衡数据的不一致性和命中率）。</p>
+<h5 id="2-方案二：读写穿透模式-Read-Write-Though-Pattern">2. 方案二：读写穿透模式(Read/Write Though Pattern)</h5>
+<ul>
+<li>核心思想：服务端将cache视为主要数据存储，直接读取和接入Redis，并由cache服务负责将数据读取和写入DB</li>
+</ul>
+<p>写：先查cache，cache中不存在，直接更新DB；若cache中存在，先更新cache，再调用cache服务<strong>同步更新</strong>DB</p>
+<p>读：先查cache，命中则直接返回；否则cache服务会先从DB加载数据然后自己写入redis缓存中，再返回响应。</p>
+<ul>
+<li>缺陷：</li>
+</ul>
+<p>1）首次请求的数据一定不在cache中。</p>
+<ul>
+<li>是否适用category blacklist的存储</li>
+</ul>
+<p>​        该模式显然不适用于category blacklist的缓存案例，因为这里的写只能是Admin侧写入DB，然后Pricing center侧负责从redis中读取数据，不能通过Redis向DB中写入数据。</p>
+<p>\3. 方案三：异步缓存写入(Write Behind Pattern)</p>
+<ul>
+<li>核心思想：与读写穿透模式相似，由cache服务负责cache和DB的读写。适用于频繁写的场景，但对数据的一致性要求不强的场景</li>
+</ul>
+<p>写：先查cache，cache未命中，直接更新DB；若cache命中，先更新cache，然后调用cache服务<strong>异步更新</strong>DB</p>
+<p>读：先查cache，命中直接返回响应；若未命中，cache服务会先从DB加载数据，然后自己写入Cache，然后返回响应。</p>
+<ul>
+<li>是否适用category blacklist的存储</li>
+</ul>
+<p>该缓存模式同样不适用于category blacklist的存储，因为category blacklist是读请求较多，写请求较少的场景，且对数据的一致性要求较高。</p>
+<h4 id="3-2-2-MySQL与Redis的数据同步操作">3.2.2 MySQL与Redis的数据同步操作</h4>
+<ol>
+<li>全量更新：可以采取</li>
+</ol>
+<p>原因：该接口更新的频率不高，且数据量不大</p>
+<p>问题：全量数据更新会涉及到缓存的全量重建的问题？MySQL中如何进行全量复制（复制data文件，耗时？）</p>
+<p>​    （1）采用定时任务check数据库和Redis中的数据</p>
+<p><img src="https://confluence.shopee.io/download/attachments/677807934/image2021-9-3_16-22-41.png?version=1&amp;modificationDate=1630657362000&amp;api=v2" alt="Shopee Kredit &gt; PDP四期开发设计方案 &gt; image2021-9-3_16-22-41.png"></p>
+<p>(2) Task任务将category blacklist从DB同步到Redis**（全量更新）**</p>
+<p><img src="https://confluence.shopee.io/download/attachments/677807934/image2021-9-3_17-17-23.png?version=1&amp;modificationDate=1630660644000&amp;api=v2" alt="Shopee Kredit &gt; PDP四期开发设计方案 &gt; image2021-9-3_17-17-23.png"></p>
+<p>2.增量更新：数据库数据修改的时候立即更新缓存，增量更新</p>
+<p>需要注意的问题：双写一致性（分布式事务，对性能的影响？）</p>
+<p>如何实现：异步任务监听数据库的更新，触发Redis的缓存更新</p>
+<p>3.消息队列实现实时监听并增量更新Redis缓存（启动定时任务该种方式可以不用？）</p>
+<p>消费订阅模式：</p>
+<p><img src="https://confluence.shopee.io/download/attachments/677807934/image2021-9-6_12-59-26.png?version=1&amp;modificationDate=1630904370000&amp;api=v2" alt="Shopee Kredit &gt; PDP四期开发设计方案 &gt; image2021-9-6_12-59-26.png"></p>
+<p>使用 Binlog 实时更新 Redis 缓存</p>
+<p><img src="https://confluence.shopee.io/download/attachments/677807934/image2021-9-6_12-57-40.png?version=1&amp;modificationDate=1630904263000&amp;api=v2" alt="Shopee Kredit &gt; PDP四期开发设计方案 &gt; image2021-9-6_12-57-40.png"></p>
+<p>这种收 Binlog 更新缓存的方案，和刚刚我们讲到的，收 MQ 消息更新缓存的方案，其实它们的实现思路是一样的，都是异步订阅实时数据变更信息，去更新 Redis。只不过，直接读取 Binlog 这种方式，它的通用性更强。不要求订单服务再发订单消息了，订单更新服务也不用费劲去解决「发消息失败怎么办？」这种数据一致性问题了。</p>
+<p>而且，在整个缓存更新链路上，减少了一个收发 MQ 的环节，从 MySQL 更新到 Redis 更新的时延更短，出现故障的可能性也更低，所以很多大厂更青睐于这种方案。</p>
+<p>这个方案唯一的缺点是，实现订单缓存更新服务有点儿复杂，毕竟不像收消息，拿到的直接就是订单数据，解析 Binlog 还是挺麻烦的。</p>
+<p>hash 空查询</p>
+<p>set</p>
+<p>布隆过滤器 + cache hash、string</p>
+<p>value +level</p>
+<p>不同层级的categoryid是否一样</p>
+<p>黑名单数据集大小</p>
+<p>增加  删除 缓存的更新 布隆过滤器 重建</p>
+<p>上传动作的记录 删除 更新的记录表</p>
+<p>PRD举个例子</p>
+<p>给出方案，然后选择什么方案</p>
+<ul>
+<li>
+<p>对于正常的激活用户，推荐分期选择具有最佳折扣的任期（如果多个任期共享相同的最佳折扣率，则选择其中最长的任期)</p>
+</li>
+<li>
+<p>对于非激活用户和冻结用户将最大分期数和最大分期金额替换为推荐分期数和推荐分期金额</p>
+</li>
+<li>
+<p>返回PDP的响应中添加推荐分期数recommend_term，推荐分期金额recommend_instalment，区分推荐分期是否有利率折扣 interest_discounted_type，分别表示正常/零息/降息</p>
+</li>
+<li>
+<p>添加商品类别过滤逻辑，若商品命中黑名单则隐藏分期金额显示，只显示来自UC的文案信息，其具体逻辑与未命中商品价格阈值的商品价格相同的逻辑相同。</p>
+</li>
+<li>
+<p>Admin交互API：上传/删除/查询category黑名单(其中当更新DB时，需要同步更新Redis缓存和布隆过滤器)</p>
+</li>
+<li>
+<p>查询产品分期query_product_instalment_info：进行category黑名单过滤时，首先查询布隆过滤器，若未命中直接返回；若未命中，则查询redis，若Redis命中，返回；若未命中，则查询DB。</p>
+</li>
+<li>
+<p>数据库新增表category_blacklist_tab和操作记录表，Redis新增category黑名单缓存。</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/29/golang%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小秋的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/08/29/golang%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" itemprop="url">golang基础语法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-08-29T13:31:22+08:00">
+                2021-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -456,6 +811,11 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// TOC item animation navigate &amp; prevent #item selector in adress bar.</span><br><span class="line"> $(&#x27;.post-toc a&#x27;).on(&#x27;click&#x27;, function (e) &#123;</span><br><span class="line">   e.preventDefault();</span><br><span class="line">   var targetSelector = NexT.utils.escapeSelector(this.getAttribute(&#x27;href&#x27;));</span><br><span class="line">   // 对获取到的url进行重编码</span><br><span class="line">   targetSelector = decodeURI(this.getAttribute(&#x27;href&#x27;));</span><br><span class="line">   var offset = $(targetSelector).offset().top;</span><br><span class="line"></span><br><span class="line">   hasVelocity ?</span><br></pre></td></tr></table></figure>
 <h2 id="注释底部内容">注释底部内容</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">&#123;% if theme.footer.powered %&#125;</span><br><span class="line">  &lt;div class=&quot;powered-by&quot;&gt;&#123;#</span><br><span class="line">  #&#125;&#123;&#123; __(&#x27;footer.powered&#x27;, &#x27;&lt;a class=&quot;theme-link&quot; target=&quot;_blank&quot; href=&quot;https://hexo.io&quot;&gt;Hexo&lt;/a&gt;&#x27;) &#125;&#125;&#123;#</span><br><span class="line">#&#125;&lt;/div&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% if theme.footer.powered and theme.footer.theme.enable %&#125;</span><br><span class="line">  &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% if theme.footer.theme.enable %&#125;</span><br><span class="line">  &lt;div class=&quot;theme-info&quot;&gt;&#123;#</span><br><span class="line">  #&#125;&#123;&#123; __(&#x27;footer.theme&#x27;) &#125;&#125; &amp;mdash; &#123;#</span><br><span class="line">  #&#125;&lt;a class=&quot;theme-link&quot; target=&quot;_blank&quot; href=&quot;https://github.com/iissnan/hexo-theme-next&quot;&gt;&#123;#</span><br><span class="line">    #&#125;NexT.&#123;&#123; theme.scheme &#125;&#125;&#123;#</span><br><span class="line">  #&#125;&lt;/a&gt;&#123;% if theme.footer.theme.version %&#125; v&#123;&#123; theme.version &#125;&#125;&#123;% endif %&#125;&#123;#</span><br><span class="line">#&#125;&lt;/div&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+<h1>常用命令</h1>
+<h2 id="创建页面">创建页面</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page &quot;about&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="打包发布">打包发布</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
           
         
@@ -541,7 +901,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
