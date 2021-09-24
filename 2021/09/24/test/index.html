@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="小秋的博客">
 <meta property="og:description" content="使用事务批量插入数据时报错,插入100条数据时不报错，插入1000条数据时报错">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/2021/09/24/test/image-20210924204100921.png">
+<meta property="og:image" content="http://example.com/.com//image-20210924204100921.png">
 <meta property="article:published_time" content="2021-09-24T14:36:05.000Z">
 <meta property="article:modified_time" content="2021-09-24T14:42:44.342Z">
 <meta property="article:author" content="Joy">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/09/24/test/image-20210924204100921.png">
+<meta name="twitter:image" content="http://example.com/.com//image-20210924204100921.png">
 
 
 
@@ -352,7 +352,7 @@
 <ul>
 <li>如何检查哪行代码有问题，看日志是非常重要的一步！！！</li>
 </ul>
-<p><img src="image-20210924204100921.png" alt="image-20210924204100921"></p>
+<p><img src="/.com//image-20210924204100921.png" alt="image-20210924204100921"></p>
 <p>这个时候就需要重点检查140行这里到底干了啥，会有什么问题！！</p>
 <ul>
 <li>仔细推敲就会发现，这里不应该取等号！！！因为假如就是插入1000条数据，然后insertLen=1000，那么此时endPos = 1000,那么传入到<code>BatchInsert</code>里面，<code>records[curPos:endPos]=records[0:1000]</code>，这里就有1001条record，但是实际上只有1000条，从而导致传给<code>BatchInsert</code>的数据里面就会存在空值，进而导致反射的时候报错（所以说copy别人的代码也需要好好地推敲每一步的意思，不然真的就是代码搬运工了。。。，特别是在取等号等一些判断条件的地方一定要非常的注意和小心，什么时候应该取等号，什么时候不应该取等号）</li>
@@ -396,6 +396,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/24/test1/" rel="prev" title="test1">
+                test1 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -467,7 +471,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
