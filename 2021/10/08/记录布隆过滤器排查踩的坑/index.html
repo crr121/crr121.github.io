@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next " lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="//main.css?v=" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <meta name="keywords" content="bug人生," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录布隆过滤器排查踩的坑">
+<meta property="og:url" content="http://example.com/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:site_name" content="小秋的博客">
+<meta property="og:description" content="使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-10-08T10:11:41.000Z">
+<meta property="article:modified_time" content="2021-10-08T10:40:56.815Z">
+<meta property="article:author" content="Joy">
+<meta property="article:tag" content="bug人生">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: '',
+    version: '',
+    sidebar: "",
+    fancybox: ,
+    tabs: ,
+    motion: "",
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title>记录布隆过滤器排查踩的坑 | 小秋的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container  page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小秋的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小秋的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记录布隆过滤器排查踩的坑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>项目中在使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中，因此一步步开始排查，发现set和get获取到的bloomfilter的byte数组的index不一样，进一步排查，发现在<code>set</code>和<code>get</code>时，他们获取到的data数据不一样。<code>set</code>和<code>get</code>方法如下。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//set</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(impl *bloomFilterCAOImpl)</span> <span class="title">Add</span><span class="params">(key <span class="keyword">string</span>, data []<span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	log.Infof(<span class="string">&quot;add bloomfilter data[]:%v&quot;</span>, data)</span><br><span class="line">	filter := getBloomFilter(key)</span><br><span class="line">	<span class="keyword">if</span> filter.InsertedElements &gt;= filter.Capacity &#123;</span><br><span class="line">		filter = resize(key, filter)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	h := utils.BaseHash(data)</span><br><span class="line">	log.Infof(<span class="string">&quot;murmur hash:%v&quot;</span>, h)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">uint64</span>(<span class="number">0</span>); i &lt; filter.HashFuns; i++ &#123;</span><br><span class="line">		loc := utils.Location(h, i)</span><br><span class="line">		slot := impl.Location(loc, filter.BitSize)</span><br><span class="line">		log.Infof(<span class="string">&quot;add slot:%v&quot;</span>, slot)</span><br><span class="line">		_, err := redis.RedisFacade().Client.SetBit(key, <span class="keyword">int64</span>(slot), <span class="number">1</span>).Result()</span><br><span class="line">		util.CheckErr(err)</span><br><span class="line">	&#125;</span><br><span class="line">	log.Infof(<span class="string">&quot;add bloomfilter data:%v&quot;</span>, redis.RedisFacade().Client.Get(key).Val())</span><br><span class="line">	insertedElements, err := strconv.ParseUint(redis.RedisFacade().Client.Get(key4InsertedElements(key)).Val(), <span class="number">10</span>, <span class="number">64</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		util.CheckErr(err)</span><br><span class="line">	&#125;</span><br><span class="line">	filter.InsertedElements = insertedElements + <span class="number">1</span></span><br><span class="line">	log.Infof(<span class="string">&quot;InsertedElements:%v&quot;</span>, filter.InsertedElements)</span><br><span class="line">	_, err = redis.RedisFacade().Client.Set(key4InsertedElements(key), filter.InsertedElements, <span class="number">0</span>).Result()</span><br><span class="line">	util.CheckErr(err)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(impl *bloomFilterCAOImpl)</span> <span class="title">IsExists</span><span class="params">(key <span class="keyword">string</span>, data []<span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	log.Infof(<span class="string">&quot;get bloomfilter data:%v&quot;</span>, data)</span><br><span class="line">	bitSize, hashFuncs, _, _ := getBloomFilterInfoFromRedis(key)</span><br><span class="line">	<span class="keyword">if</span> bitSize &lt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	h := utils.BaseHash(data)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">uint64</span>(<span class="number">0</span>); i &lt; hashFuncs; i++ &#123;</span><br><span class="line">		loc := utils.Location(h, i)</span><br><span class="line">		slot := impl.Location(loc, bitSize)</span><br><span class="line">		log.Infof(<span class="string">&quot;get slot:%v&quot;</span>, slot)</span><br><span class="line">		result, _ := redis.RedisFacade().Client.GetBit(key, <span class="keyword">int64</span>(slot)).Result()</span><br><span class="line">		<span class="keyword">if</span> result&amp;<span class="number">1</span> == <span class="number">0</span> &#123;</span><br><span class="line">			log.Infof(<span class="string">&quot;bit is:%v&quot;</span>, result)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的<code>data</code>数据是通过字符串转为字节数组，转换方法如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(biz *CategoryBlacklistBiz)</span> <span class="title">CategoryBackListInfo2Bytes</span><span class="params">(categoryBlacklist *model.CategoryBlacklistInfo)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	s := fmt.Sprintf(categoryBlacklist.CategoryId, <span class="string">&quot;:&quot;</span>, categoryBlacklist.CategoryLevel)</span><br><span class="line">	log.Infof(<span class="string">&quot;categoryid:%v, categoryLevel:%v, s:%v&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span><br><span class="line"><span class="comment">//	s := fmt.Sprintf(&quot;%s:%s&quot;, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel)</span></span><br><span class="line"><span class="comment">//	log.Infof(&quot;categoryid:%v, categoryLevel:%+v, s:%+v&quot;, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span></span><br><span class="line">	byteArr := []<span class="keyword">byte</span>(s)</span><br><span class="line">	log.Infof(<span class="string">&quot;category byteArr:%+v&quot;</span>, byteArr)</span><br><span class="line">	<span class="keyword">return</span> byteArr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么既然转换得到的<code>data</code>字节数组不一样，就应该是<code>set</code>和<code>get</code>的字符串不一样</p>
+<p>通过调试，将转换之前的字符串打印出来看看，发现打印出来的拼接的字符串很奇怪</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Service] [CategoryBackListInfo2Bytes] categoryid:900002, categoryLevel:L%!(EXTRA int=0), s:900002%!(EXTRA string=:, string=L%!(EXTRA int=0))</span><br></pre></td></tr></table></figure>
+<p>咋眼一看，还没发现出错误，后来经过自己写了一个demo，测试才发现了问题。。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>))</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, <span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>))</span><br><span class="line">&#125;</span><br><span class="line">hello%!(EXTRA <span class="keyword">string</span>=:, <span class="keyword">string</span>=world)</span><br><span class="line">hello:world</span><br></pre></td></tr></table></figure>
+<p>所以我到底拼接了一个什么鬼。。。</p>
+<p>修改了字符串的拼接之后，发现没有问题了，哎，一言难尽啊</p>
+<p>贴出正确的拼接方式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(biz *CategoryBlacklistBiz)</span> <span class="title">CategoryBackListInfo2Bytes</span><span class="params">(categoryBlacklist *model.CategoryBlacklistInfo)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	s := fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel)</span><br><span class="line">	log.Infof(<span class="string">&quot;categoryid:%v, categoryLevel:%+v, s:%+v&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span><br><span class="line">	byteArr := []<span class="keyword">byte</span>(s)</span><br><span class="line">	log.Infof(<span class="string">&quot;category byteArr:%+v&quot;</span>, byteArr)</span><br><span class="line">	<span class="keyword">return</span> byteArr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后来想了想原因，发现应该是我把字符串的拼接当成了log函数的打印…</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>))</span><br><span class="line">	fmt.Println(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>)</span><br><span class="line">	fmt.Println(<span class="number">1</span>, <span class="string">&quot;:&quot;</span>, <span class="number">2</span>)</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, <span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>))</span><br><span class="line">&#125;</span><br><span class="line">hello%!(EXTRA <span class="keyword">string</span>=:, <span class="keyword">string</span>=world)</span><br><span class="line">hello : world</span><br><span class="line"><span class="number">1</span> : <span class="number">2</span></span><br><span class="line">hello:world</span><br></pre></td></tr></table></figure>
+<p>所以都是基础不扎实，写代码想当然。。不思考。。一失足成千古恨，细节决定成败啊，一个小问题浪费了一晚上。。</p>
+<p>再次扎实一下字符串的拼接，贴上源码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sprintf formats according to a format specifier and returns the resulting string.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Sprintf</span><span class="params">(format <span class="keyword">string</span>, a ...<span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	p := newPrinter()</span><br><span class="line">	p.doPrintf(format, a)</span><br><span class="line">	s := <span class="keyword">string</span>(p.buf)</span><br><span class="line">	p.free()</span><br><span class="line">	<span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Sprintf(目标字符串 string，传入的参数 interface )</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *pp)</span> <span class="title">doPrintf</span><span class="params">(format <span class="keyword">string</span>, a []<span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	end := <span class="built_in">len</span>(format)</span><br><span class="line">	argNum := <span class="number">0</span>         <span class="comment">// we process one argument per non-trivial format</span></span><br><span class="line">	afterIndex := <span class="literal">false</span> <span class="comment">// previous item in format was an index like [3].</span></span><br><span class="line">	p.reordered = <span class="literal">false</span></span><br><span class="line">formatLoop:</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; end; &#123;</span><br><span class="line">		p.goodArgNum = <span class="literal">true</span></span><br><span class="line">		lasti := i</span><br><span class="line">		<span class="keyword">for</span> i &lt; end &amp;&amp; format[i] != <span class="string">&#x27;%&#x27;</span> &#123;<span class="comment">////////////去找目标字符串中的百分号</span></span><br><span class="line">			i++</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> i &gt; lasti &#123;</span><br><span class="line">			p.buf.writeString(format[lasti:i])</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> i &gt;= end &#123;</span><br><span class="line">			<span class="comment">// done processing format string</span></span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Process one verb</span></span><br><span class="line">		i++</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have flags?</span></span><br><span class="line">		p.fmt.clearflags()</span><br><span class="line">	simpleFormat:</span><br><span class="line">		<span class="keyword">for</span> ; i &lt; end; i++ &#123;</span><br><span class="line">			c := format[i]</span><br><span class="line">			<span class="keyword">switch</span> c &#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">				p.fmt.sharp = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span>:</span><br><span class="line">				p.fmt.zero = !p.fmt.minus <span class="comment">// Only allow zero padding to the left.</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">				p.fmt.plus = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">				p.fmt.minus = <span class="literal">true</span></span><br><span class="line">				p.fmt.zero = <span class="literal">false</span> <span class="comment">// Do not pad with zeros to the right.</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27; &#x27;</span>:</span><br><span class="line">				p.fmt.space = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">default</span>:</span><br><span class="line">				<span class="comment">// Fast path for common case of ascii lower case simple verbs</span></span><br><span class="line">				<span class="comment">// without precision or width or argument indices.</span></span><br><span class="line">				<span class="keyword">if</span> <span class="string">&#x27;a&#x27;</span> &lt;= c &amp;&amp; c &lt;= <span class="string">&#x27;z&#x27;</span> &amp;&amp; argNum &lt; <span class="built_in">len</span>(a) &#123;</span><br><span class="line">					<span class="keyword">if</span> c == <span class="string">&#x27;v&#x27;</span> &#123;</span><br><span class="line">						<span class="comment">// Go syntax</span></span><br><span class="line">						p.fmt.sharpV = p.fmt.sharp</span><br><span class="line">						p.fmt.sharp = <span class="literal">false</span></span><br><span class="line">						<span class="comment">// Struct-field syntax</span></span><br><span class="line">						p.fmt.plusV = p.fmt.plus</span><br><span class="line">						p.fmt.plus = <span class="literal">false</span></span><br><span class="line">					&#125;</span><br><span class="line">					p.printArg(a[argNum], <span class="keyword">rune</span>(c))</span><br><span class="line">					argNum++</span><br><span class="line">					i++</span><br><span class="line">					<span class="keyword">continue</span> formatLoop</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">// Format is more complex than simple flags and a verb or is malformed.</span></span><br><span class="line">				<span class="keyword">break</span> simpleFormat</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have an explicit argument index?</span></span><br><span class="line">		argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have width?</span></span><br><span class="line">		<span class="keyword">if</span> i &lt; end &amp;&amp; format[i] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">			i++</span><br><span class="line">			p.fmt.wid, p.fmt.widPresent, argNum = intFromArg(a, argNum)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> !p.fmt.widPresent &#123;</span><br><span class="line">				p.buf.writeString(badWidthString)</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// We have a negative width, so take its value and ensure</span></span><br><span class="line">			<span class="comment">// that the minus flag is set</span></span><br><span class="line">			<span class="keyword">if</span> p.fmt.wid &lt; <span class="number">0</span> &#123;</span><br><span class="line">				p.fmt.wid = -p.fmt.wid</span><br><span class="line">				p.fmt.minus = <span class="literal">true</span></span><br><span class="line">				p.fmt.zero = <span class="literal">false</span> <span class="comment">// Do not pad with zeros to the right.</span></span><br><span class="line">			&#125;</span><br><span class="line">			afterIndex = <span class="literal">false</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			p.fmt.wid, p.fmt.widPresent, i = parsenum(format, i, end)</span><br><span class="line">			<span class="keyword">if</span> afterIndex &amp;&amp; p.fmt.widPresent &#123; <span class="comment">// &quot;%[3]2d&quot;</span></span><br><span class="line">				p.goodArgNum = <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have precision?</span></span><br><span class="line">		<span class="keyword">if</span> i+<span class="number">1</span> &lt; end &amp;&amp; format[i] == <span class="string">&#x27;.&#x27;</span> &#123;</span><br><span class="line">			i++</span><br><span class="line">			<span class="keyword">if</span> afterIndex &#123; <span class="comment">// &quot;%[3].2d&quot;</span></span><br><span class="line">				p.goodArgNum = <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line">			<span class="keyword">if</span> i &lt; end &amp;&amp; format[i] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">				i++</span><br><span class="line">				p.fmt.prec, p.fmt.precPresent, argNum = intFromArg(a, argNum)</span><br><span class="line">				<span class="comment">// Negative precision arguments don&#x27;t make sense</span></span><br><span class="line">				<span class="keyword">if</span> p.fmt.prec &lt; <span class="number">0</span> &#123;</span><br><span class="line">					p.fmt.prec = <span class="number">0</span></span><br><span class="line">					p.fmt.precPresent = <span class="literal">false</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> !p.fmt.precPresent &#123;</span><br><span class="line">					p.buf.writeString(badPrecString)</span><br><span class="line">				&#125;</span><br><span class="line">				afterIndex = <span class="literal">false</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				p.fmt.prec, p.fmt.precPresent, i = parsenum(format, i, end)</span><br><span class="line">				<span class="keyword">if</span> !p.fmt.precPresent &#123;</span><br><span class="line">					p.fmt.prec = <span class="number">0</span></span><br><span class="line">					p.fmt.precPresent = <span class="literal">true</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> !afterIndex &#123;</span><br><span class="line">			argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> i &gt;= end &#123;</span><br><span class="line">			p.buf.writeString(noVerbString)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		verb, size := <span class="keyword">rune</span>(format[i]), <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> verb &gt;= utf8.RuneSelf &#123;</span><br><span class="line">			verb, size = utf8.DecodeRuneInString(format[i:])</span><br><span class="line">		&#125;</span><br><span class="line">		i += size</span><br><span class="line"></span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> verb == <span class="string">&#x27;%&#x27;</span>: <span class="comment">// Percent does not absorb operands and ignores f.wid and f.prec.</span></span><br><span class="line">			p.buf.writeByte(<span class="string">&#x27;%&#x27;</span>)</span><br><span class="line">		<span class="keyword">case</span> !p.goodArgNum:</span><br><span class="line">			p.badArgNum(verb)</span><br><span class="line">		<span class="keyword">case</span> argNum &gt;= <span class="built_in">len</span>(a): <span class="comment">// No argument left over to print for the current verb.</span></span><br><span class="line">			p.missingArg(verb)</span><br><span class="line">		<span class="keyword">case</span> verb == <span class="string">&#x27;v&#x27;</span>:</span><br><span class="line">			<span class="comment">// Go syntax</span></span><br><span class="line">			p.fmt.sharpV = p.fmt.sharp</span><br><span class="line">			p.fmt.sharp = <span class="literal">false</span></span><br><span class="line">			<span class="comment">// Struct-field syntax</span></span><br><span class="line">			p.fmt.plusV = p.fmt.plus</span><br><span class="line">			p.fmt.plus = <span class="literal">false</span></span><br><span class="line">			<span class="keyword">fallthrough</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			p.printArg(a[argNum], verb)</span><br><span class="line">			argNum++</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Check for extra arguments unless the call accessed the arguments</span></span><br><span class="line">	<span class="comment">// out of order, in which case it&#x27;s too expensive to detect if they&#x27;ve all</span></span><br><span class="line">	<span class="comment">// been used and arguably OK if they&#x27;re not.</span></span><br><span class="line">	<span class="keyword">if</span> !p.reordered &amp;&amp; argNum &lt; <span class="built_in">len</span>(a) &#123;</span><br><span class="line">		p.fmt.clearflags()</span><br><span class="line">		p.buf.writeString(extraString)</span><br><span class="line">		<span class="keyword">for</span> i, arg := <span class="keyword">range</span> a[argNum:] &#123;</span><br><span class="line">			<span class="keyword">if</span> i &gt; <span class="number">0</span> &#123;</span><br><span class="line">				p.buf.writeString(commaSpaceString)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> arg == <span class="literal">nil</span> &#123;</span><br><span class="line">				p.buf.writeString(nilAngleString)</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				p.buf.writeString(reflect.TypeOf(arg).String())</span><br><span class="line">				p.buf.writeByte(<span class="string">&#x27;=&#x27;</span>)</span><br><span class="line">				p.printArg(arg, <span class="string">&#x27;v&#x27;</span>)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		p.buf.writeByte(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bug%E4%BA%BA%E7%94%9F/" rel="tag"># bug人生</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/" rel="next" title="db_transaction end failed: reflect: call of reflect.Value.Type on zero Value">
+                <i class="fa fa-chevron-left"></i> db_transaction end failed: reflect: call of reflect.Value.Type on zero Value
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/10/08/init%E6%96%B9%E6%B3%95%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/" rel="prev" title="init方法踩过的坑">
+                init方法踩过的坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Joy</span>
+
+  
+</div>
+<!--
+
+
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="//jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="//src/utils.js?v="></script>
+
+  <script type="text/javascript" src="//src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="//src/scrollspy.js?v="></script>
+<script type="text/javascript" src="//src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="//src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
