@@ -2,13 +2,15 @@
 
 
 
+  
 
-<html class="theme-next " lang="zh-Hans">
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="">
+<meta name="theme-color" content="#222">
 
 
 
@@ -36,16 +38,9 @@
 
 
 
-
-
-
-
-
-
-<link href="/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="//main.css?v=" rel="stylesheet" type="text/css" />
-
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -53,6 +48,27 @@
 
 
 
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -77,27 +93,29 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '',
-    scheme: '',
-    version: '',
-    sidebar: "",
-    fancybox: ,
-    tabs: ,
-    motion: "",
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
-      userId: 'undefined',
+      userId: '0',
       author: '博主'
     },
     algolia: {
       applicationID: '',
       apiKey: '',
       indexName: '',
-      hits: "",
-      labels: ""
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
   };
 </script>
 
 
+
+  <link rel="canonical" href="http://example.com/page/2/"/>
 
 
 
@@ -119,8 +137,10 @@
 
   
   
+    
+  
 
-  <div class="container  
+  <div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -153,6 +173,62 @@
 <nav class="site-nav">
   
 
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
   
 
   
@@ -188,7 +264,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -208,6 +284,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-10-08T18:11:41+08:00">
+                2021-10-08
+              </time>
+            
 
             
 
@@ -215,22 +301,61 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bug%E4%BA%BA%E7%94%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">bug人生</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
           
-
+             <span id="/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/" class="leancloud_visitors" data-flag-title="记录布隆过滤器排查踩的坑">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
 
           
-              <div class="post-description">
-                  使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中
-              </div>
+
           
 
         </div>
@@ -247,29 +372,14 @@
 
       
         
-          
-            <p>项目中在使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中，因此一步步开始排查，发现set和get获取到的bloomfilter的byte数组的index不一样，进一步排查，发现在<code>set</code>和<code>get</code>时，他们获取到的data数据不一样。<code>set</code>和<code>get</code>方法如下。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//set</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(impl *bloomFilterCAOImpl)</span> <span class="title">Add</span><span class="params">(key <span class="keyword">string</span>, data []<span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	log.Infof(<span class="string">&quot;add bloomfilter data[]:%v&quot;</span>, data)</span><br><span class="line">	filter := getBloomFilter(key)</span><br><span class="line">	<span class="keyword">if</span> filter.InsertedElements &gt;= filter.Capacity &#123;</span><br><span class="line">		filter = resize(key, filter)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	h := utils.BaseHash(data)</span><br><span class="line">	log.Infof(<span class="string">&quot;murmur hash:%v&quot;</span>, h)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">uint64</span>(<span class="number">0</span>); i &lt; filter.HashFuns; i++ &#123;</span><br><span class="line">		loc := utils.Location(h, i)</span><br><span class="line">		slot := impl.Location(loc, filter.BitSize)</span><br><span class="line">		log.Infof(<span class="string">&quot;add slot:%v&quot;</span>, slot)</span><br><span class="line">		_, err := redis.RedisFacade().Client.SetBit(key, <span class="keyword">int64</span>(slot), <span class="number">1</span>).Result()</span><br><span class="line">		util.CheckErr(err)</span><br><span class="line">	&#125;</span><br><span class="line">	log.Infof(<span class="string">&quot;add bloomfilter data:%v&quot;</span>, redis.RedisFacade().Client.Get(key).Val())</span><br><span class="line">	insertedElements, err := strconv.ParseUint(redis.RedisFacade().Client.Get(key4InsertedElements(key)).Val(), <span class="number">10</span>, <span class="number">64</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		util.CheckErr(err)</span><br><span class="line">	&#125;</span><br><span class="line">	filter.InsertedElements = insertedElements + <span class="number">1</span></span><br><span class="line">	log.Infof(<span class="string">&quot;InsertedElements:%v&quot;</span>, filter.InsertedElements)</span><br><span class="line">	_, err = redis.RedisFacade().Client.Set(key4InsertedElements(key), filter.InsertedElements, <span class="number">0</span>).Result()</span><br><span class="line">	util.CheckErr(err)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(impl *bloomFilterCAOImpl)</span> <span class="title">IsExists</span><span class="params">(key <span class="keyword">string</span>, data []<span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	log.Infof(<span class="string">&quot;get bloomfilter data:%v&quot;</span>, data)</span><br><span class="line">	bitSize, hashFuncs, _, _ := getBloomFilterInfoFromRedis(key)</span><br><span class="line">	<span class="keyword">if</span> bitSize &lt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	h := utils.BaseHash(data)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">uint64</span>(<span class="number">0</span>); i &lt; hashFuncs; i++ &#123;</span><br><span class="line">		loc := utils.Location(h, i)</span><br><span class="line">		slot := impl.Location(loc, bitSize)</span><br><span class="line">		log.Infof(<span class="string">&quot;get slot:%v&quot;</span>, slot)</span><br><span class="line">		result, _ := redis.RedisFacade().Client.GetBit(key, <span class="keyword">int64</span>(slot)).Result()</span><br><span class="line">		<span class="keyword">if</span> result&amp;<span class="number">1</span> == <span class="number">0</span> &#123;</span><br><span class="line">			log.Infof(<span class="string">&quot;bit is:%v&quot;</span>, result)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里的<code>data</code>数据是通过字符串转为字节数组，转换方法如下</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(biz *CategoryBlacklistBiz)</span> <span class="title">CategoryBackListInfo2Bytes</span><span class="params">(categoryBlacklist *model.CategoryBlacklistInfo)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	s := fmt.Sprintf(categoryBlacklist.CategoryId, <span class="string">&quot;:&quot;</span>, categoryBlacklist.CategoryLevel)</span><br><span class="line">	log.Infof(<span class="string">&quot;categoryid:%v, categoryLevel:%v, s:%v&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span><br><span class="line"><span class="comment">//	s := fmt.Sprintf(&quot;%s:%s&quot;, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel)</span></span><br><span class="line"><span class="comment">//	log.Infof(&quot;categoryid:%v, categoryLevel:%+v, s:%+v&quot;, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span></span><br><span class="line">	byteArr := []<span class="keyword">byte</span>(s)</span><br><span class="line">	log.Infof(<span class="string">&quot;category byteArr:%+v&quot;</span>, byteArr)</span><br><span class="line">	<span class="keyword">return</span> byteArr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么既然转换得到的<code>data</code>字节数组不一样，就应该是<code>set</code>和<code>get</code>的字符串不一样</p>
-<p>通过调试，将转换之前的字符串打印出来看看，发现打印出来的拼接的字符串很奇怪</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Service] [CategoryBackListInfo2Bytes] categoryid:900002, categoryLevel:L%!(EXTRA int=0), s:900002%!(EXTRA string=:, string=L%!(EXTRA int=0))</span><br></pre></td></tr></table></figure>
-<p>咋眼一看，还没发现出错误，后来经过自己写了一个demo，测试才发现了问题。。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>))</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, <span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>))</span><br><span class="line">&#125;</span><br><span class="line">hello%!(EXTRA <span class="keyword">string</span>=:, <span class="keyword">string</span>=world)</span><br><span class="line">hello:world</span><br></pre></td></tr></table></figure>
-<p>所以我到底拼接了一个什么鬼。。。</p>
-<p>修改了字符串的拼接之后，发现没有问题了，哎，一言难尽啊</p>
-<p>贴出正确的拼接方式</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(biz *CategoryBlacklistBiz)</span> <span class="title">CategoryBackListInfo2Bytes</span><span class="params">(categoryBlacklist *model.CategoryBlacklistInfo)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	s := fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel)</span><br><span class="line">	log.Infof(<span class="string">&quot;categoryid:%v, categoryLevel:%+v, s:%+v&quot;</span>, categoryBlacklist.CategoryId, categoryBlacklist.CategoryLevel, s)</span><br><span class="line">	byteArr := []<span class="keyword">byte</span>(s)</span><br><span class="line">	log.Infof(<span class="string">&quot;category byteArr:%+v&quot;</span>, byteArr)</span><br><span class="line">	<span class="keyword">return</span> byteArr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>后来想了想原因，发现应该是我把字符串的拼接当成了log函数的打印…</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>))</span><br><span class="line">	fmt.Println(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;:&quot;</span>, <span class="string">&quot;world&quot;</span>)</span><br><span class="line">	fmt.Println(<span class="number">1</span>, <span class="string">&quot;:&quot;</span>, <span class="number">2</span>)</span><br><span class="line">	fmt.Println(fmt.Sprintf(<span class="string">&quot;%s:%s&quot;</span>, <span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>))</span><br><span class="line">&#125;</span><br><span class="line">hello%!(EXTRA <span class="keyword">string</span>=:, <span class="keyword">string</span>=world)</span><br><span class="line">hello : world</span><br><span class="line"><span class="number">1</span> : <span class="number">2</span></span><br><span class="line">hello:world</span><br></pre></td></tr></table></figure>
-<p>所以都是基础不扎实，写代码想当然。。不思考。。一失足成千古恨，细节决定成败啊，一个小问题浪费了一晚上。。</p>
-<p>再次扎实一下字符串的拼接，贴上源码</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sprintf formats according to a format specifier and returns the resulting string.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Sprintf</span><span class="params">(format <span class="keyword">string</span>, a ...<span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	p := newPrinter()</span><br><span class="line">	p.doPrintf(format, a)</span><br><span class="line">	s := <span class="keyword">string</span>(p.buf)</span><br><span class="line">	p.free()</span><br><span class="line">	<span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Sprintf(目标字符串 string，传入的参数 interface )</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *pp)</span> <span class="title">doPrintf</span><span class="params">(format <span class="keyword">string</span>, a []<span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	end := <span class="built_in">len</span>(format)</span><br><span class="line">	argNum := <span class="number">0</span>         <span class="comment">// we process one argument per non-trivial format</span></span><br><span class="line">	afterIndex := <span class="literal">false</span> <span class="comment">// previous item in format was an index like [3].</span></span><br><span class="line">	p.reordered = <span class="literal">false</span></span><br><span class="line">formatLoop:</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; end; &#123;</span><br><span class="line">		p.goodArgNum = <span class="literal">true</span></span><br><span class="line">		lasti := i</span><br><span class="line">		<span class="keyword">for</span> i &lt; end &amp;&amp; format[i] != <span class="string">&#x27;%&#x27;</span> &#123;<span class="comment">////////////去找目标字符串中的百分号</span></span><br><span class="line">			i++</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> i &gt; lasti &#123;</span><br><span class="line">			p.buf.writeString(format[lasti:i])</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> i &gt;= end &#123;</span><br><span class="line">			<span class="comment">// done processing format string</span></span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Process one verb</span></span><br><span class="line">		i++</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have flags?</span></span><br><span class="line">		p.fmt.clearflags()</span><br><span class="line">	simpleFormat:</span><br><span class="line">		<span class="keyword">for</span> ; i &lt; end; i++ &#123;</span><br><span class="line">			c := format[i]</span><br><span class="line">			<span class="keyword">switch</span> c &#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">				p.fmt.sharp = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span>:</span><br><span class="line">				p.fmt.zero = !p.fmt.minus <span class="comment">// Only allow zero padding to the left.</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">				p.fmt.plus = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">				p.fmt.minus = <span class="literal">true</span></span><br><span class="line">				p.fmt.zero = <span class="literal">false</span> <span class="comment">// Do not pad with zeros to the right.</span></span><br><span class="line">			<span class="keyword">case</span> <span class="string">&#x27; &#x27;</span>:</span><br><span class="line">				p.fmt.space = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">default</span>:</span><br><span class="line">				<span class="comment">// Fast path for common case of ascii lower case simple verbs</span></span><br><span class="line">				<span class="comment">// without precision or width or argument indices.</span></span><br><span class="line">				<span class="keyword">if</span> <span class="string">&#x27;a&#x27;</span> &lt;= c &amp;&amp; c &lt;= <span class="string">&#x27;z&#x27;</span> &amp;&amp; argNum &lt; <span class="built_in">len</span>(a) &#123;</span><br><span class="line">					<span class="keyword">if</span> c == <span class="string">&#x27;v&#x27;</span> &#123;</span><br><span class="line">						<span class="comment">// Go syntax</span></span><br><span class="line">						p.fmt.sharpV = p.fmt.sharp</span><br><span class="line">						p.fmt.sharp = <span class="literal">false</span></span><br><span class="line">						<span class="comment">// Struct-field syntax</span></span><br><span class="line">						p.fmt.plusV = p.fmt.plus</span><br><span class="line">						p.fmt.plus = <span class="literal">false</span></span><br><span class="line">					&#125;</span><br><span class="line">					p.printArg(a[argNum], <span class="keyword">rune</span>(c))</span><br><span class="line">					argNum++</span><br><span class="line">					i++</span><br><span class="line">					<span class="keyword">continue</span> formatLoop</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">// Format is more complex than simple flags and a verb or is malformed.</span></span><br><span class="line">				<span class="keyword">break</span> simpleFormat</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have an explicit argument index?</span></span><br><span class="line">		argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have width?</span></span><br><span class="line">		<span class="keyword">if</span> i &lt; end &amp;&amp; format[i] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">			i++</span><br><span class="line">			p.fmt.wid, p.fmt.widPresent, argNum = intFromArg(a, argNum)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> !p.fmt.widPresent &#123;</span><br><span class="line">				p.buf.writeString(badWidthString)</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// We have a negative width, so take its value and ensure</span></span><br><span class="line">			<span class="comment">// that the minus flag is set</span></span><br><span class="line">			<span class="keyword">if</span> p.fmt.wid &lt; <span class="number">0</span> &#123;</span><br><span class="line">				p.fmt.wid = -p.fmt.wid</span><br><span class="line">				p.fmt.minus = <span class="literal">true</span></span><br><span class="line">				p.fmt.zero = <span class="literal">false</span> <span class="comment">// Do not pad with zeros to the right.</span></span><br><span class="line">			&#125;</span><br><span class="line">			afterIndex = <span class="literal">false</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			p.fmt.wid, p.fmt.widPresent, i = parsenum(format, i, end)</span><br><span class="line">			<span class="keyword">if</span> afterIndex &amp;&amp; p.fmt.widPresent &#123; <span class="comment">// &quot;%[3]2d&quot;</span></span><br><span class="line">				p.goodArgNum = <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Do we have precision?</span></span><br><span class="line">		<span class="keyword">if</span> i+<span class="number">1</span> &lt; end &amp;&amp; format[i] == <span class="string">&#x27;.&#x27;</span> &#123;</span><br><span class="line">			i++</span><br><span class="line">			<span class="keyword">if</span> afterIndex &#123; <span class="comment">// &quot;%[3].2d&quot;</span></span><br><span class="line">				p.goodArgNum = <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line">			<span class="keyword">if</span> i &lt; end &amp;&amp; format[i] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">				i++</span><br><span class="line">				p.fmt.prec, p.fmt.precPresent, argNum = intFromArg(a, argNum)</span><br><span class="line">				<span class="comment">// Negative precision arguments don&#x27;t make sense</span></span><br><span class="line">				<span class="keyword">if</span> p.fmt.prec &lt; <span class="number">0</span> &#123;</span><br><span class="line">					p.fmt.prec = <span class="number">0</span></span><br><span class="line">					p.fmt.precPresent = <span class="literal">false</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> !p.fmt.precPresent &#123;</span><br><span class="line">					p.buf.writeString(badPrecString)</span><br><span class="line">				&#125;</span><br><span class="line">				afterIndex = <span class="literal">false</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				p.fmt.prec, p.fmt.precPresent, i = parsenum(format, i, end)</span><br><span class="line">				<span class="keyword">if</span> !p.fmt.precPresent &#123;</span><br><span class="line">					p.fmt.prec = <span class="number">0</span></span><br><span class="line">					p.fmt.precPresent = <span class="literal">true</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> !afterIndex &#123;</span><br><span class="line">			argNum, i, afterIndex = p.argNumber(argNum, format, i, <span class="built_in">len</span>(a))</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> i &gt;= end &#123;</span><br><span class="line">			p.buf.writeString(noVerbString)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		verb, size := <span class="keyword">rune</span>(format[i]), <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> verb &gt;= utf8.RuneSelf &#123;</span><br><span class="line">			verb, size = utf8.DecodeRuneInString(format[i:])</span><br><span class="line">		&#125;</span><br><span class="line">		i += size</span><br><span class="line"></span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> verb == <span class="string">&#x27;%&#x27;</span>: <span class="comment">// Percent does not absorb operands and ignores f.wid and f.prec.</span></span><br><span class="line">			p.buf.writeByte(<span class="string">&#x27;%&#x27;</span>)</span><br><span class="line">		<span class="keyword">case</span> !p.goodArgNum:</span><br><span class="line">			p.badArgNum(verb)</span><br><span class="line">		<span class="keyword">case</span> argNum &gt;= <span class="built_in">len</span>(a): <span class="comment">// No argument left over to print for the current verb.</span></span><br><span class="line">			p.missingArg(verb)</span><br><span class="line">		<span class="keyword">case</span> verb == <span class="string">&#x27;v&#x27;</span>:</span><br><span class="line">			<span class="comment">// Go syntax</span></span><br><span class="line">			p.fmt.sharpV = p.fmt.sharp</span><br><span class="line">			p.fmt.sharp = <span class="literal">false</span></span><br><span class="line">			<span class="comment">// Struct-field syntax</span></span><br><span class="line">			p.fmt.plusV = p.fmt.plus</span><br><span class="line">			p.fmt.plus = <span class="literal">false</span></span><br><span class="line">			<span class="keyword">fallthrough</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			p.printArg(a[argNum], verb)</span><br><span class="line">			argNum++</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Check for extra arguments unless the call accessed the arguments</span></span><br><span class="line">	<span class="comment">// out of order, in which case it&#x27;s too expensive to detect if they&#x27;ve all</span></span><br><span class="line">	<span class="comment">// been used and arguably OK if they&#x27;re not.</span></span><br><span class="line">	<span class="keyword">if</span> !p.reordered &amp;&amp; argNum &lt; <span class="built_in">len</span>(a) &#123;</span><br><span class="line">		p.fmt.clearflags()</span><br><span class="line">		p.buf.writeString(extraString)</span><br><span class="line">		<span class="keyword">for</span> i, arg := <span class="keyword">range</span> a[argNum:] &#123;</span><br><span class="line">			<span class="keyword">if</span> i &gt; <span class="number">0</span> &#123;</span><br><span class="line">				p.buf.writeString(commaSpaceString)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> arg == <span class="literal">nil</span> &#123;</span><br><span class="line">				p.buf.writeString(nilAngleString)</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				p.buf.writeString(reflect.TypeOf(arg).String())</span><br><span class="line">				p.buf.writeByte(<span class="string">&#x27;=&#x27;</span>)</span><br><span class="line">				p.printArg(arg, <span class="string">&#x27;v&#x27;</span>)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		p.buf.writeByte(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-          
+          使用布隆过滤器对黑名单进行过滤时，发现已经存在于布隆过滤器中的黑名单，查询的时候却认为没有在布隆过滤器中
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/10/08/%E8%AE%B0%E5%BD%95%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8E%92%E6%9F%A5%E8%B8%A9%E7%9A%84%E5%9D%91/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -321,7 +431,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -341,6 +451,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-24T23:40:17+08:00">
+                2021-09-24
+              </time>
+            
 
             
 
@@ -348,22 +468,61 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bug%E4%BA%BA%E7%94%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">bug人生</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
           
-
+             <span id="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/" class="leancloud_visitors" data-flag-title="db_transaction end failed: reflect: call of reflect.Value.Type on zero Value">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
 
           
-              <div class="post-description">
-                  批量插入数据，插入100条不报错，插入1000条报错
-              </div>
+
           
 
         </div>
@@ -380,37 +539,14 @@
 
       
         
-          
-            <p>排查过程：</p>
-<ul>
-<li>上网查找该错误码的意思</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41995110/panic-reflect-call-of-reflect-value-call-on-zero-value">https://stackoverflow.com/questions/41995110/panic-reflect-call-of-reflect-value-call-on-zero-value</a></p>
-<p>大概意思就是空值导致使用<code>reflect.ValueOf</code>进行反射的时候报错</p>
-<ul>
-<li>
-<p>检查哪里有空值（照理来说应该是这样的排查步骤，既然发现了是空值的原因导致的）</p>
-<ul>
-<li>那么首先就应该排查是否是批量插入的数据本书是不合法的，存在一部分空值，经检查，数据合法</li>
-<li>接下来就应该排查是否是批量插入数据的时候传入了空值（既然原始数据本身合法，没有空值那么为啥又会插入空值，此时就应该在批量插入处的代码进行检查）</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在同一个事务中</span></span><br><span class="line">	db.WithTransaction(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">//2. 分批插入</span></span><br><span class="line">		insertCount := <span class="keyword">int64</span>(<span class="number">0</span>)</span><br><span class="line">		curPos := <span class="number">0</span></span><br><span class="line">		<span class="keyword">for</span> curPos &lt; insertLen &#123;</span><br><span class="line">			endPos := curPos + <span class="number">1000</span></span><br><span class="line">			log.Infof(<span class="string">&quot;endPos:%v&quot;</span>, endPos)</span><br><span class="line">			<span class="keyword">if</span> endPos &lt;= insertLen &#123; </span><br><span class="line">				insertCount += dao.CategoryBlacklistInfoDAO().BatchInsert(ctx, records[curPos:endPos]...)<span class="comment">//140行</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				insertCount += dao.CategoryBlacklistInfoDAO().BatchInsert(ctx, records[curPos:]...)</span><br><span class="line">			&#125;</span><br><span class="line">			curPos = endPos</span><br><span class="line">		&#125;</span><br><span class="line">		log.Infof(<span class="string">&quot;insertCount:%v,insertLen:%v&quot;</span>, insertCount, insertLen)</span><br><span class="line">		<span class="keyword">if</span> insertCount != <span class="keyword">int64</span>(insertLen) &#123;</span><br><span class="line">			<span class="built_in">panic</span>(exception.OPERATION_NOT_ALLOWED)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//同步布隆过滤器</span></span><br><span class="line">		appenBloomfilterWhenUpload(req)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如何检查哪行代码有问题，看日志是非常重要的一步！！！</li>
-</ul>
-<p><img src="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/image-20210924204100921-2496292-2498042.png" alt="image-20210924204100921"></p>
-<p>这个时候就需要重点检查140行这里到底干了啥，会有什么问题！！</p>
-<ul>
-<li>仔细推敲就会发现，这里不应该取等号！！！因为假如就是插入1000条数据，然后insertLen=1000，那么此时endPos = 1000,那么传入到<code>BatchInsert</code>里面，<code>records[curPos:endPos]=records[0:1000]</code>，这里就有1001条record，但是实际上只有1000条，从而导致传给<code>BatchInsert</code>的数据里面就会存在空值，进而导致反射的时候报错（所以说copy别人的代码也需要好好地推敲每一步的意思，不然真的就是代码搬运工了。。。，特别是在取等号等一些判断条件的地方一定要非常的注意和小心，什么时候应该取等号，什么时候不应该取等号）</li>
-</ul>
-</li>
-</ul>
-<p>而事实上，我却走了很多的弯路 :cry:</p>
-<p>因为插入100条的时候没有报错，而插入1000条的时候报错，当时直觉告诉我是不是一次性<code>batch insesrt</code>的数据量太大了，所以调整了1000到500甚至到100，<code>endPos := curPos + 1000</code>，但是发现都无济于事，然后又猜测是<code>batch insert</code>不能放在<code>transaction</code></p>
-<p>里面，导致大事务的问题。但是拿出来也没有解决，此时就没辙了。。。后来问了坐我后面的大佬，大佬很耐心的帮忙排查，一步步检查代码，发现了是数组越界导致传了空值:clap:</p>
-<p>经过一番折腾，也终于解决了这个bug, 下班之前记录一下，警醒自己以后要学会看日志，要学会分析问题，并学会根据问题的原因去排查，而不是主观的臆断。。</p>
-
-          
+          批量插入数据，插入100条不报错，插入1000条报错
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/09/24/db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -462,7 +598,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -482,6 +618,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-20T20:46:54+08:00">
+                2021-09-20
+              </time>
+            
 
             
 
@@ -489,22 +635,61 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/09/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/09/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
           
-
+             <span id="/2021/09/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/" class="leancloud_visitors" data-flag-title="读书笔记——《代码整洁之道》">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
 
           
-              <div class="post-description">
-                  《代码整洁之道》读书笔记
-              </div>
+
           
 
         </div>
@@ -521,48 +706,14 @@
 
       
         
-          
-            <p>「命令」：</p>
-<ul>
-<li>
-<p>变量命名要名副其实；</p>
-</li>
-<li>
-<p>不要用易产生误导的命名；</p>
-</li>
-<li>
-<p>要做有意义的区分；</p>
-</li>
-<li>
-<p>使用可搜索的名称（unique）；</p>
-</li>
-<li>
-<p>类名不应该是动词以及具有广泛意义的名称比如Manager，Data，Info等；</p>
-</li>
-<li>
-<p>方法名应该是动词；每个概念对应一个词，比如控制器就用controller代替，而不是controller和manager混用；</p>
-</li>
-<li>
-<p>不用双关语；添加有意义的语境，不要添加没用的语境，比如对于一个GSD的应用，不需要在每个类前面添加GSD，</p>
-</li>
-</ul>
-<p>「函数」：</p>
-<ul>
-<li>
-<p>短小；只做一件事(如何区分只做一件事看这件事能不能再拆分出一个函数独立出来)；</p>
-</li>
-<li>
-<p>每个函数一个抽象层级</p>
-</li>
-</ul>
-<p>「注释」：</p>
-<ul>
-<li>不要把代码注释掉，要么就直接删除</li>
-<li>能用函数或者变量时就别用注释</li>
-</ul>
-<p>「」</p>
-
-          
+          《代码整洁之道》读书笔记
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/09/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -614,7 +765,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -634,6 +785,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-20T20:18:59+08:00">
+                2021-09-20
+              </time>
+            
 
             
 
@@ -644,9 +805,30 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/09/20/Bloomfilter%E6%B5%85%E5%B0%9D/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/09/20/Bloomfilter%E6%B5%85%E5%B0%9D/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
+          
+             <span id="/2021/09/20/Bloomfilter%E6%B5%85%E5%B0%9D/" class="leancloud_visitors" data-flag-title="Bloomfilter浅尝">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
@@ -723,7 +905,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -743,6 +925,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-03T18:03:07+08:00">
+                2021-09-03
+              </time>
+            
 
             
 
@@ -750,22 +942,61 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
           
-
+             <span id="/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/" class="leancloud_visitors" data-flag-title="redis缓存策略">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
 
           
-              <div class="post-description">
-                  Redis缓存策略
-              </div>
+
           
 
         </div>
@@ -782,10 +1013,14 @@
 
       
         
-          
-            <h1>旁路缓存模式</h1>
-
-          
+          Redis缓存策略
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/09/03/redis%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -837,7 +1072,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -857,6 +1092,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-08-29T13:31:22+08:00">
+                2021-08-29
+              </time>
+            
 
             
 
@@ -867,9 +1112,30 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/08/29/golang%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/08/29/golang%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
+          
+             <span id="/2021/08/29/golang%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" class="leancloud_visitors" data-flag-title="golang基础语法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
@@ -946,7 +1212,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -966,6 +1232,16 @@
         <div class="post-meta">
           <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-08-28T23:51:49+08:00">
+                2021-08-28
+              </time>
+            
 
             
 
@@ -973,22 +1249,61 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">Hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
           
-
+             <span id="/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" class="leancloud_visitors" data-flag-title="hexo&next主题博客搭建">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
 
           
-              <div class="post-description">
-                  hexo&next主题博客搭建
-              </div>
+
           
 
         </div>
@@ -1005,126 +1320,14 @@
 
       
         
-          
-            <h1>初始化blog</h1>
-<ul>
-<li>
-<p>本地创建blog文件夹</p>
-</li>
-<li>
-<p>执行初始化</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>安装部署工具</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>修改配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:crr121/crr121.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>编译&amp;部署</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1>next主题配置</h1>
-<p><a target="_blank" rel="noopener" href="https://theme-next.iissnan.com/getting-started.html">https://theme-next.iissnan.com/getting-started.html</a></p>
-<ul>
-<li>
-<p>clone</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>启用主题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>我们最好使用 <code>hexo clean</code> 来清除 Hexo 的缓存。</p>
-</blockquote>
-</li>
-<li>
-<p>修改主题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1>设置语言</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br></pre></td></tr></table></figure>
-<h1>设置站点名称</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 小秋的博客</span><br><span class="line">subtitle: &#x27;&#x27;</span><br><span class="line">description: &#x27;&#x27;</span><br><span class="line">keywords:</span><br><span class="line">author: Joy</span><br><span class="line">language: en</span><br><span class="line">timezone: &#x27;&#x27;</span><br></pre></td></tr></table></figure>
-<h1>设置菜单</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  schedule: /schedule/ || calendar</span><br><span class="line">  sitemap: /sitemap.xml || sitemap</span><br><span class="line">  commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
-<p><code>||</code>后面的表示图标，使用<code>Font Awesome</code>图标名字</p>
-<p>设置完菜单但是没有页面的话点击菜单就会报错了。创建刚才建了菜单的页面执行以下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line">hexo new page about</span><br><span class="line">hexo new page archives</span><br></pre></td></tr></table></figure>
-<p>然后在<code>source</code>目录下就会生成对应的文件夹，每个文件夹里都有一个<code>index.md</code>，打开将页面的<code>type</code>设置为相应的内容。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: 标签</span><br><span class="line">date: </span><br><span class="line">type: &quot;tags&quot; # 或者 &quot;categories&quot;/&quot;about&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p><code>comments</code>是关闭这个页面的评论功能用的，评论后面会提到。</p>
-<h1>设置首页不显示全文</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 100</span><br></pre></td></tr></table></figure>
-<p>默认首页的文章会显示全文，在主题配置文件设置<code>auto_excerpt</code>为<code>true</code>再设置长度就会只显示你设置的字数了。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 100</span><br></pre></td></tr></table></figure>
-<p>但是，官方是不推荐这种做法的，我这里用的方法是发表的文章的开头加上<code>description</code>，这样，文章就会显示这个摘要：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">title: # 文章标题</span><br><span class="line">author: # 作者</span><br><span class="line">tags: </span><br><span class="line">  - Hexo</span><br><span class="line">  - Next</span><br><span class="line">categories: </span><br><span class="line">  - Hexo</span><br><span class="line">  - Next</span><br><span class="line">description: # 描述，首页文章显示的摘要</span><br><span class="line">date: </span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>这里的<code>tags</code>和<code>categories</code>就是给文章加上标签和分类，两者的区别就是<code>categories</code>是有层级的，像上面那样分类里<code>Next</code>就是<code>Hexo</code>的子类，Hexo是不支持指定多个同级分类的。</p>
-<h1>bug</h1>
-<h2 id="启用主题后报错">启用主题后报错</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &#x27;_layout.swig&#x27; %&#125; &#123;% import &#x27;_macro/post.swig&#x27; as post_template %&#125; &#123;% import &#x27;_macro/sidebar.swig&#x27; as sidebar_template %&#125; &#123;% block title %&#125;&#123;&#123; config.title &#125;&#125;&#123;% if theme.index_with_subtitle and config.subtitle %&#125; - &#123;&#123;config.subtitle &#125;&#125;&#123;% endif %&#125;&#123;% endblock %&#125; &#123;% block page_class %&#125; &#123;% if is_home() %&#125;page-home&#123;% endif -%&#125; &#123;% endblock %&#125; &#123;% block content %&#125;</span><br><span class="line">&#123;% for post in page.posts %&#125; &#123;&#123; post_template.render(post, true) &#125;&#125; &#123;% endfor %&#125;</span><br><span class="line">&#123;% include &#x27;_partials/pagination.swig&#x27; %&#125; &#123;% endblock %&#125; &#123;% block sidebar %&#125; &#123;&#123; sidebar_template.render(false) &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
-<p>原因是hexo在5.0之后把swig给删除了需要自己手动安装</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-renderer-swig</span><br></pre></td></tr></table></figure>
-<p>然后hexo clean清理缓存，hexo g  &amp; hexo d 即可！</p>
-<h2 id="设置菜单，点击报错">设置菜单，点击报错</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /about/%20</span><br></pre></td></tr></table></figure>
-<p>去掉//后的空格</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /|| home</span><br><span class="line">  about: /about/|| user</span><br><span class="line">  tags: /tags/|| tags</span><br><span class="line">  categories: /categories/|| th</span><br><span class="line">  archives: /archives/|| archive</span><br><span class="line">  #schedule: /schedule/|| calendar</span><br><span class="line"> #sitemap: /sitemap.xml || sitemap</span><br><span class="line"> #commonweal: /404/ ||heartbeat</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="点击目录不跳转-点击英文目录可以正常跳转">点击目录不跳转[点击英文目录可以正常跳转]</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post-details.js?v=5.1.4:76 Uncaught TypeError: Cannot read property &#x27;top&#x27; of undefined</span><br><span class="line">    at HTMLAnchorElement.&lt;anonymous&gt; (post-details.js?v=5.1.4:76)</span><br><span class="line">    at HTMLAnchorElement.dispatch (index.js?v=2.1.3:3)</span><br><span class="line">    at HTMLAnchorElement.r.handl</span><br><span class="line">    </span><br><span class="line">    Uncaught TypeError: Cannot read property &#x27;replace&#x27; of null</span><br><span class="line">Uncaught TypeError: Cannot read property &#x27;replace&#x27; of null</span><br></pre></td></tr></table></figure>
-<p>尝试过的方法：</p>
-<ul>
-<li></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">卸载 Hexo 默认自带的 Markdown 渲染器</span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line">安装 hexo-renderer-markdown-it 插件</span><br><span class="line">npm i hexo-renderer-markdown-it --save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">markdown:</span><br><span class="line">  anchor:</span><br><span class="line">    level: 2</span><br></pre></td></tr></table></figure>
-<ul>
-<li></li>
-</ul>
-<p>Markdown 的插件并未渲染 heading 的 id ，所以导致锚点失效。</p>
-<p>原来会被编译成 <code>&lt;h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code></p>
-<p>而现在会被编译成 <code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
-<p><strong>解决方案</strong></p>
-<p>进入你项目根目录的 <code>node_modules/hexo-toc/lib/filter.js</code> 中，把28行~31行修改为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">复制代码$title.attr(&#x27;id&#x27;, id);</span><br></pre></td></tr></table></figure>
-<p>即，仅保留28行，其他的内容注释掉。</p>
-<p>问题得以解决。</p>
-<ul>
-<li></li>
-</ul>
-<p>Just use a plugin <code>markdown-it-named-headings</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install markdown-it-named-headings --save</span><br></pre></td></tr></table></figure>
-<ul>
-<li>直到看到这个【因为只有点击中文无法跳转，说明就是没有对中文进行正常的解码】</li>
-</ul>
-<p>The mistake is obvious , Because the console has told me that the error code is in <code>post-details.js</code> In the , Follow the prompts to find <code>themes\next\source\js\src\post-details.js</code>, Find No 73 Behavior directory binding click event method , Will see ：</p>
-<p><img src="/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20201217170155109.png" alt="image-20201217170155109"></p>
-<p><code>targetSelector</code> It’s the title of id, Let’s re code it before he’s pushed into the selector ：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  To get url Re encode </span></span><br><span class="line">targetSelector = <span class="built_in">decodeURI</span>(<span class="built_in">this</span>.getAttribute(<span class="string">&#x27;href&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// TOC item animation navigate &amp; prevent #item selector in adress bar.</span><br><span class="line"> $(&#x27;.post-toc a&#x27;).on(&#x27;click&#x27;, function (e) &#123;</span><br><span class="line">   e.preventDefault();</span><br><span class="line">   var targetSelector = NexT.utils.escapeSelector(this.getAttribute(&#x27;href&#x27;));</span><br><span class="line">   // 对获取到的url进行重编码</span><br><span class="line">   targetSelector = decodeURI(this.getAttribute(&#x27;href&#x27;));</span><br><span class="line">   var offset = $(targetSelector).offset().top;</span><br><span class="line"></span><br><span class="line">   hasVelocity ?</span><br></pre></td></tr></table></figure>
-<h2 id="注释底部内容">注释底部内容</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">&#123;% if theme.footer.powered %&#125;</span><br><span class="line">  &lt;div class=&quot;powered-by&quot;&gt;&#123;#</span><br><span class="line">  #&#125;&#123;&#123; __(&#x27;footer.powered&#x27;, &#x27;&lt;a class=&quot;theme-link&quot; target=&quot;_blank&quot; href=&quot;https://hexo.io&quot;&gt;Hexo&lt;/a&gt;&#x27;) &#125;&#125;&#123;#</span><br><span class="line">#&#125;&lt;/div&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% if theme.footer.powered and theme.footer.theme.enable %&#125;</span><br><span class="line">  &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% if theme.footer.theme.enable %&#125;</span><br><span class="line">  &lt;div class=&quot;theme-info&quot;&gt;&#123;#</span><br><span class="line">  #&#125;&#123;&#123; __(&#x27;footer.theme&#x27;) &#125;&#125; &amp;mdash; &#123;#</span><br><span class="line">  #&#125;&lt;a class=&quot;theme-link&quot; target=&quot;_blank&quot; href=&quot;https://github.com/iissnan/hexo-theme-next&quot;&gt;&#123;#</span><br><span class="line">    #&#125;NexT.&#123;&#123; theme.scheme &#125;&#125;&#123;#</span><br><span class="line">  #&#125;&lt;/a&gt;&#123;% if theme.footer.theme.version %&#125; v&#123;&#123; theme.version &#125;&#125;&#123;% endif %&#125;&#123;#</span><br><span class="line">#&#125;&lt;/div&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="图片不显示">图片不显示</h2>
-<p>将图片复制到对应blog的文件夹里面（也可以剪切）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -R pic/* db-transaction-end-failed-reflect-call-of-reflect-Value-Type-on-zero-Value/</span><br></pre></td></tr></table></figure>
-<h2 id="翻页显示HTML代码">翻页显示HTML代码</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> ~/blog/themes/next/layout/_partials [master *]</span><br><span class="line">± % vi pagination.swig</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if page.prev or page.next %&#125;</span><br><span class="line">  &lt;nav class=&quot;pagination&quot;&gt;</span><br><span class="line">    &#123;&#123;</span><br><span class="line">      paginator(&#123;</span><br><span class="line">        prev_text: &#x27;&lt;&#x27;,</span><br><span class="line">        next_text: &#x27;&gt;&#x27;,</span><br><span class="line">        mid_size: 1,</span><br><span class="line">        escape: false</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;&#125;</span><br><span class="line">  &lt;/nav&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">~</span><br><span class="line">~</span><br></pre></td></tr></table></figure>
-<p>ERROR Error: ENOENT: no such file or directory, open ‘/Users/rong.chen/blog/themes/next/layout/_scripts/schemes/.swig’</p>
-<p><a target="_blank" rel="noopener" href="https://www.cxybb.com/article/lcyaiym/76762074">https://www.cxybb.com/article/lcyaiym/76762074</a></p>
-<h1>常用命令</h1>
-<h2 id="创建页面">创建页面</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page &quot;about&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="打包发布">打包发布</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-          
+          hexo&next主题博客搭建
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/08/28/hexo-next%E4%B8%BB%E9%A2%98%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1197,6 +1400,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.png"
+                alt="" />
+            
               <p class="site-author-name" itemprop="name"></p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
@@ -1206,7 +1413,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/%7C%7C%20archive">
               
                   <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
@@ -1269,7 +1476,7 @@
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
-    <i class="fa fa-"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Joy</span>
 
@@ -1277,7 +1484,13 @@
 </div>
 <!--
 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
+
+  <span class="post-meta-divider">|</span>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 -->
 
@@ -1322,6 +1535,8 @@
 
 
 
+  
+
 
 
 
@@ -1335,48 +1550,53 @@
 
   
   
-    <script type="text/javascript" src="//jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="//fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
   
 
   
   
-    <script type="text/javascript" src="//jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
   
 
   
   
-    <script type="text/javascript" src="//velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="//velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
 
   
 
 
-  <script type="text/javascript" src="//src/utils.js?v="></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
 
-  <script type="text/javascript" src="//src/motion.js?v="></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
 
 
 
   
-  
-
   
 
   
 
+  
 
-  <script type="text/javascript" src="//src/bootstrap.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -1411,6 +1631,28 @@
 
 
 
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'HRweYePU3amQ8Xl1CNSA7kTY-MdYXbMMI',
+        appKey: 'wtumgGjACSAvmgqL31vaKunI',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
 
 
   
@@ -1420,6 +1662,113 @@
 
 
   
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("HRweYePU3amQ8Xl1CNSA7kTY-MdYXbMMI", "wtumgGjACSAvmgqL31vaKunI");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
