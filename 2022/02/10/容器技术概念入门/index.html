@@ -86,17 +86,19 @@
 <meta property="og:site_name" content="小秋的博客">
 <meta property="og:description" content="容器技术概念入门">
 <meta property="og:locale">
+<meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/Kubernetes.png">
 <meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/1501834316650_5358_1501834315826.jpg">
 <meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/1501834451293_3571_1501834450533.png">
 <meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/1501834466718_3807_1501834465932.jpg">
 <meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/cloudFoundry.png">
 <meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/docker-4667469.png">
+<meta property="og:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/cgroup.png">
 <meta property="article:published_time" content="2022-02-10T13:20:15.000Z">
-<meta property="article:modified_time" content="2022-02-12T12:45:20.235Z">
+<meta property="article:modified_time" content="2022-02-12T15:30:12.334Z">
 <meta property="article:author" content="Joy">
 <meta property="article:tag" content="k8s">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/1501834316650_5358_1501834315826.jpg">
+<meta name="twitter:image" content="http://example.com/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/Kubernetes.png">
 
 
 
@@ -383,7 +385,9 @@
       
 
       
-        <h1>PaaS</h1>
+        <h1>Kubernetes发展史</h1>
+<p><img src="/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/Kubernetes.png" alt="Kubernetes"></p>
+<h1>PaaS</h1>
 <h2 id="PaaS-SaaS-IaaS">PaaS&amp;SaaS&amp;IaaS</h2>
 <p>云服务只是一个统称，可以分成三大类。</p>
 <p><img src="/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/1501834316650_5358_1501834315826.jpg" alt="img"></p>
@@ -440,8 +444,65 @@
 <p>而 Docker 镜像解决的，恰恰就是打包这个根本性的问题。 所谓 Docker 镜像，其实就是一个压缩包。但是这个压缩包里的内容，比 PaaS 的应用可执行文件 + 启停脚本的组合就要丰富多了。实际上，大多数 Docker 镜像是直接由一个完整操作系统的所有文件和目录构成的，所以这个压缩包里的内容跟你本地开发和测试环境用的操作系统是完全一样的。这就有意思了：假设你的应用在本地运行时，能看见的环境是 CentOS 7.2 操作系统的所有文件和目录，那么只要用 CentOS 7.2 的 ISO 做一个压缩包，再把你的应用可执行文件也压缩进去，那么无论在哪里解压这个压缩包，都可以得到与你本地测试时一样的环境。当然，你的应用也在里面！这就是 Docker 镜像最厉害的地方：只要有这个压缩包在手，你就可以使用某种技术创建一个“沙盒”，在“沙盒”中解压这个压缩包，然后就可以运行你的程序了。</p>
 <p>更重要的是，这个压缩包包含了完整的操作系统文件和目录，也就是包含了这个应用运行所需要的所有依赖，所以你可以先用这个压缩包在本地进行开发和测试，完成之后，再把这个压缩包上传到云端运行。在这个过程中，你完全不需要进行任何配置或者修改，因为这个<strong>压缩包赋予了你一种极其宝贵的能力：本地环境和云端环境的高度一致！</strong></p>
 <p>所以，Docker 项目给 PaaS 世界带来的“降维打击”，其实是提供了一种非常便利的打包机制。这种机制直接打包了应用运行所需要的整个操作系统，从而保证了本地环境和云端环境的高度一致，避免了用户通过“试错”来匹配两种不同运行环境之间差异的痛苦过程。</p>
+<h2 id="多级docker-swarm">多级docker-swarm</h2>
+<h3 id="与coreOS的渊源">与coreOS的渊源</h3>
+<p>CoreOS 是一个基础设施领域创业公司。 它的核心产品是一个定制化的操作系统，用户可以按照分布式集群的方式，管理所有安装了这个操作系统的节点。从而，用户在集群里部署和管理应用就像使用单机一样方便了。Docker 项目发布后，CoreOS 公司很快就认识到可以把“容器”的概念无缝集成到自己的这套方案中，从而为用户提供更高层次的 PaaS 能力。所以，CoreOS 很早就成了 Docker 项目的贡献者，并在短时间内成为了 Docker 项目中第二重要的力量。然而，这段短暂的蜜月期到 2014 年底就草草结束了。CoreOS 公司以强烈的措辞宣布与 Docker 公司停止合作，并直接推出了自己研制的 Rocket（后来叫 rkt）容器。这次决裂的根本原因，正是源于 Docker 公司对 Docker 项目定位的不满足。Docker 公司解决这种不满足的方法就是，让 Docker 项目提供更多的平台层能力，即向 PaaS 项目进化。而这，显然与 CoreOS 公司的核心产品和战略发生了严重冲突。也就是说，Docker 公司在 2014 年就已经定好了平台化的发展方向，并且绝对不会跟 CoreOS 在平台层面开展任何合作。这样看来，Docker 公司在 2014 年 12 月的 DockerCon 上发布 Swarm 的举动，也就一点都不突然了。相较于 CoreOS 是依托于一系列开源项目（比如 Container Linux 操作系统、Fleet 作业调度工具、systemd 进程管理和 rkt 容器），一层层搭建起来的平台产品，Swarm 项目则是以一个完整的整体来对外提供集群管理功能。而 Swarm 的最大亮点，则是它完全使用 Docker 项目原本的容器管理 API 来完成集群管理，比如：</p>
+<ul>
+<li>单机 Docker 项目：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run <span class="string">&quot;我的容器</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>多机 Docker 项目：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -H <span class="string">&quot;我的Swarm集群API地址&quot;</span> <span class="string">&quot;我的容器&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>所以在部署了 Swarm 的多机环境下，用户只需要使用原先的 Docker 指令创建一个容器，这个请求就会被 Swarm 拦截下来处理，然后通过具体的调度算法找到一个合适的 Docker Daemon 运行起来。这个操作方式简洁明了，对于已经了解过 Docker 命令行的开发者们也很容易掌握。所以，这样一个“原生”的 Docker 容器集群管理项目一经发布，就受到了已有 Docker 用户群的热捧。而相比之下，CoreOS 的解决方案就显得非常另类，更不用说用户还要去接受完全让人摸不着头脑、新造的容器项目 rkt 了。</p>
+<h2 id="容器编排">容器编排</h2>
+<p>而此时已经大红大紫到“不差钱”的 Docker 公司，开始及时地借助这波浪潮通过并购来完善自己的平台层能力。其中一个最成功的案例，莫过于对 Fig 项目的收购。要知道，Fig 项目基本上只是靠两个人全职开发和维护的，可它却是当时 GitHub 上热度堪比 Docker 项目的明星。Fig 项目之所以受欢迎，在于它在开发者面前第一次提出了“容器编排”（Container Orchestration）的概念。其实，“编排”（Orchestration）在云计算行业里不算是新词汇，它主要是指用户如何通过某些工具或者配置来完成一组虚拟机以及关联资源的定义、配置、创建、删除等工作，然后由云计算平台按照这些指定的逻辑来完成的过程。而容器时代，“编排”显然就是对 Docker 容器的一系列定义、配置和创建动作的管理。而 Fig 的工作实际上非常简单：假如现在用户需要部署的是应用容器 A、数据库容器 B、负载均衡容器 C，那么 Fig 就允许用户把 A、B、C 三个容器定义在一个配置文件中，并且可以指定它们之间的关联关系，比如容器 A 需要访问数据库容器 B。接下来，你只需要执行一条非常简单的指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> fig up</span></span><br></pre></td></tr></table></figure>
+<p><strong>Fig 就会把这些容器的定义和配置交给 Docker API 按照访问逻辑依次创建，你的一系列容器就都启动了；而容器 A 与 B 之间的关联关系，也会交给 Docker 的 Link 功能通过写入 hosts 文件的方式进行配置</strong>。更重要的是，你还可以在 Fig 的配置文件里定义各种容器的副本个数等编排参数，再加上 Swarm 的集群管理能力，一个活脱脱的 PaaS 呼之欲出。Fig 项目被收购后改名为 Compose，它成了 Docker 公司到目前为止第二大受欢迎的项目，一直到今天也依然被很多人使用。当时的这个容器生态里，还有很多令人眼前一亮的开源项目或公司。比如，专门负责处理容器网络的 SocketPlane 项目（后来被 Docker 公司收购），专门负责处理容器存储的 Flocker 项目（后来被 EMC 公司收购），专门给 Docker 集群做图形化管理界面和对外提供云服务的 Tutum 项目（后来被 Docker 公司收购）等等。一时之间，整个后端和云计算领域的聪明才俊都汇集在了这个“小鲸鱼”的周围，为 Docker 生态的蓬勃发展献上了自己的智慧。</p>
+<h1>Cgroup &amp; namespace机制</h1>
+<h2 id="概述">概述</h2>
+<p>cgroup和namespace类似，也是将进程进行分组，但它的目的和namespace不一样，namespace是为了隔离进程组之间的资源，而cgroup是为了对一组进程进行统一的资源监控和限制。</p>
+<p>cgroup分<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=YpCFhFX%2F1lx60lpWmVKT9w%3D%3D.Cc1zbHmtfQtvcCBLEjSWFqqk%2BlJ2keRChBMMB0k3Q23UpOCeQdZ8UcZ483dr%2BVxrsLGyy8hBuGMSdJPmHCaxeg%3D%3D">v1</a>和<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=JD%2FU%2BSt%2B2f%2BsCyTH%2BMai9g%3D%3D.I293v6SbMFdy82dXTyu9ZptU5h%2B%2FXPTM7lkJJbKQLcrCKeo7QqczTAnuTsMOoVUkuxlGjKsrvmjJlGh6%2Fl6pfA%3D%3D">v2</a>两个版本，v1实现较早，功能比较多，但是由于它里面的功能都是零零散散的实现的，所以规划的不是很好，导致了一些使用和维护上的不便，v2的出现就是为了解决v1中这方面的问题，在最新的4.5内核中，cgroup v2声称已经可以用于生产环境了，但它所支持的功能还很有限，随着v2一起引入内核的还有cgroup namespace。v1和v2可以混合使用，但是这样会更复杂，所以一般没人会这样用。</p>
+<h2 id="为什么需要cgroup">为什么需要cgroup</h2>
+<p>在Linux里，一直以来就有对进程进行分组的概念和需求，比如<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=D%2BMMTpVFFWuC6gePFzOvjQ%3D%3D.5C85jJAG9KlYvMpBrjL2eDAtEk1iRv8oY2XabsdSeBtrABf91xVzQmTBZweIHUZf">session group， progress group</a>等，后来随着人们对这方面的需求越来越多，比如需要追踪一组进程的内存和IO使用情况等，于是出现了cgroup，用来统一将进程进行分组，并在分组的基础上对进程进行监控和资源控制管理等。</p>
+<h2 id="什么是cgroup">什么是cgroup</h2>
+<p>术语cgroup在不同的上下文中代表不同的意思，可以指整个Linux的cgroup技术，也可以指一个具体进程组。</p>
+<p>cgroup是Linux下的一种将进程按组进行管理的机制，在用户层看来，cgroup技术就是把系统中的所有进程组织成一颗一颗独立的树，每棵树都包含系统的所有进程，树的每个节点是一个进程组，而每颗树又和一个或者多个subsystem关联，树的作用是将进程分组，而subsystem的作用就是对这些组进行操作。cgroup主要包括下面两部分：</p>
+<ul>
+<li><strong>subsystem</strong> 一个subsystem就是一个内核模块，他被关联到一颗cgroup树之后，就会在树的每个节点（进程组）上做具体的操作。subsystem经常被称作&quot;resource controller&quot;，因为它主要被用来调度或者限制每个进程组的资源，但是这个说法不完全准确，因为有时我们将进程分组只是为了做一些监控，观察一下他们的状态，比如perf_event subsystem。到目前为止，Linux支持12种subsystem，比如限制CPU的使用时间，限制使用的内存，统计CPU的使用情况，冻结和恢复一组进程等，后续会对它们一一进行介绍。</li>
+<li><strong>hierarchy</strong> 一个hierarchy可以理解为一棵cgroup树，树的每个节点就是一个进程组，每棵树都会与零到多个subsystem关联。在一颗树里面，会包含Linux系统中的所有进程，但每个进程只能属于一个节点（进程组）。系统中可以有很多颗cgroup树，每棵树都和不同的subsystem关联，一个进程可以属于多颗树，即一个进程可以属于多个进程组，只是这些进程组和不同的subsystem关联。目前Linux支持12种subsystem，如果不考虑不与任何subsystem关联的情况（systemd就属于这种情况），Linux里面最多可以建12颗cgroup树，每棵树关联一个subsystem，当然也可以只建一棵树，然后让这棵树关联所有的subsystem。当一颗cgroup树不和任何subsystem关联的时候，意味着这棵树只是将进程进行分组，至于要在分组的基础上做些什么，将由应用程序自己决定，systemd就是一个这样的例子。</li>
+</ul>
+<h2 id="如何查看当前系统支持哪些subsystem">如何查看当前系统支持哪些subsystem</h2>
+<p>可以通过查看/proc/cgroups(since Linux 2.6.24)知道当前系统支持哪些subsystem，下面是一个例子</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#subsys_name    hierarchy       num_cgroups     enabled</span></span><br><span class="line"><span class="attribute">cpuset</span>          <span class="number">11</span>              <span class="number">1</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">cpu</span>             <span class="number">3</span>               <span class="number">64</span>              <span class="number">1</span></span><br><span class="line"><span class="attribute">cpuacct</span>         <span class="number">3</span>               <span class="number">64</span>              <span class="number">1</span></span><br><span class="line"><span class="attribute">blkio</span>           <span class="number">8</span>               <span class="number">64</span>              <span class="number">1</span></span><br><span class="line"><span class="attribute">memory</span>          <span class="number">9</span>               <span class="number">104</span>             <span class="number">1</span></span><br><span class="line"><span class="attribute">devices</span>         <span class="number">5</span>               <span class="number">64</span>              <span class="number">1</span></span><br><span class="line"><span class="attribute">freezer</span>         <span class="number">10</span>              <span class="number">4</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">net_cls</span>         <span class="number">6</span>               <span class="number">1</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">perf_event</span>      <span class="number">7</span>               <span class="number">1</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">net_prio</span>        <span class="number">6</span>               <span class="number">1</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">hugetlb</span>         <span class="number">4</span>               <span class="number">1</span>               <span class="number">1</span></span><br><span class="line"><span class="attribute">pids</span>            <span class="number">2</span>               <span class="number">68</span>              <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>从左到右，字段的含义分别是：</p>
+<ol>
+<li>subsystem的名字</li>
+<li>subsystem所关联到的cgroup树的ID，如果多个subsystem关联到同一颗cgroup树，那么他们的这个字段将一样，比如这里的cpu和cpuacct就一样，表示他们绑定到了同一颗树。如果出现下面的情况，这个字段将为0：
+<ul>
+<li>当前subsystem没有和任何cgroup树绑定</li>
+<li>当前subsystem已经和cgroup v2的树绑定</li>
+<li>当前subsystem没有被内核开启</li>
+</ul>
+</li>
+<li>subsystem所关联的cgroup树中进程组的个数，也即树上节点的个数</li>
+<li>1表示开启，0表示没有被开启(可以通过设置内核的启动参数“cgroup_disable”来控制subsystem的开启).</li>
+</ol>
+<h2 id="如何查看当前进程属于哪些cgroup">如何查看当前进程属于哪些cgroup</h2>
+<p>可以通过查看/proc/[pid]/cgroup(since Linux 2.6.24)知道指定进程属于哪些cgroup。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">dev@ubuntu:~$ cat /proc/777/cgroup</span><br><span class="line">11:cpuset:/</span><br><span class="line">10:freezer:/</span><br><span class="line">9:memory:/system.slice/cron.service</span><br><span class="line">8:blkio:/system.slice/cron.service</span><br><span class="line">7:perf_event:/</span><br><span class="line">6:net_cls,net_prio:/</span><br><span class="line">5:devices:/system.slice/cron.service</span><br><span class="line">4:hugetlb:/</span><br><span class="line">3:cpu,cpuacct:/system.slice/cron.service</span><br><span class="line">2:pids:/system.slice/cron.service</span><br><span class="line">1:name=systemd:/system.slice/cron.service</span><br></pre></td></tr></table></figure>
+<p>每一行包含用冒号隔开的三列，他们的意思分别是</p>
+<ol>
+<li>cgroup树的ID， 和/proc/cgroups文件中的ID一一对应。</li>
+<li>和cgroup树绑定的所有subsystem，多个subsystem之间用逗号隔开。这里name=systemd表示没有和任何subsystem绑定，只是给他起了个名字叫systemd。</li>
+<li>进程在cgroup树中的路径，即进程所属的cgroup，这个路径是相对于挂载点的相对路径。</li>
+</ol>
+<p><img src="/2022/02/10/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8/cgroup.png" alt="cgroup"></p>
 <h1>Ref</h1>
 <p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1005641?from=15425">IaaS，PaaS，SaaS 的区别</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000006917884">Linux Cgroup系列（01）：Cgroup概述</a></p>
+<p>《深入剖析 Kubernetes》</p>
 
       
     </div>
@@ -619,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">PaaS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS-SaaS-IaaS"><span class="nav-number">1.1.</span> <span class="nav-text">PaaS&amp;SaaS&amp;IaaS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS%E5%B9%BF%E6%B3%9B%E6%B5%81%E8%A1%8C%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.2.</span> <span class="nav-text">PaaS广泛流行的主要原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">1.3.</span> <span class="nav-text">PaaS工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cloud-Fountry%E7%9A%84%E8%BD%AF%E8%82%8B"><span class="nav-number">1.4.</span> <span class="nav-text">Cloud Fountry的软肋</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Docker镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E9%95%9C%E5%83%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">2.1.</span> <span class="nav-text">Docker镜像的工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E9%95%9C%E5%83%8F%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3Cloud-Fountry%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%BD%AF%E8%82%8B%E7%9A%84"><span class="nav-number">2.2.</span> <span class="nav-text">Docker镜像是如何解决Cloud Fountry项目的软肋的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Ref</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes发展史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">PaaS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS-SaaS-IaaS"><span class="nav-number">2.1.</span> <span class="nav-text">PaaS&amp;SaaS&amp;IaaS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS%E5%B9%BF%E6%B3%9B%E6%B5%81%E8%A1%8C%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.2.</span> <span class="nav-text">PaaS广泛流行的主要原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">2.3.</span> <span class="nav-text">PaaS工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cloud-Fountry%E7%9A%84%E8%BD%AF%E8%82%8B"><span class="nav-number">2.4.</span> <span class="nav-text">Cloud Fountry的软肋</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Docker镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E9%95%9C%E5%83%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text">Docker镜像的工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E9%95%9C%E5%83%8F%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3Cloud-Fountry%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%BD%AF%E8%82%8B%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">Docker镜像是如何解决Cloud Fountry项目的软肋的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7docker-swarm"><span class="nav-number">3.3.</span> <span class="nav-text">多级docker-swarm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8EcoreOS%E7%9A%84%E6%B8%8A%E6%BA%90"><span class="nav-number">3.3.1.</span> <span class="nav-text">与coreOS的渊源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92"><span class="nav-number">3.4.</span> <span class="nav-text">容器编排</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">Cgroup &amp; namespace机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">4.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81cgroup"><span class="nav-number">4.2.</span> <span class="nav-text">为什么需要cgroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFcgroup"><span class="nav-number">4.3.</span> <span class="nav-text">什么是cgroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9F%E6%94%AF%E6%8C%81%E5%93%AA%E4%BA%9Bsubsystem"><span class="nav-number">4.4.</span> <span class="nav-text">如何查看当前系统支持哪些subsystem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%9B%E7%A8%8B%E5%B1%9E%E4%BA%8E%E5%93%AA%E4%BA%9Bcgroup"><span class="nav-number">4.5.</span> <span class="nav-text">如何查看当前进程属于哪些cgroup</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">Ref</span></a></li></ol></div>
             
 
           </div>
