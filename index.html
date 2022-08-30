@@ -937,17 +937,14 @@
 
       
         
-          
-            <h1>无法查看binlog</h1>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">  %</span><span class="bash"> /usr/<span class="built_in">local</span>/mysql-8.0.25-macos11-x86_64/bin/mysqlbinlog  /usr/<span class="built_in">local</span>/mysql/data/mysql-bin.000001                      !6903</span></span><br><span class="line">mysqlbinlog: [ERROR] unknown variable &#x27;default-character-set=utf8&#x27;.</span><br></pre></td></tr></table></figure>
-<p>原因是mysqlbinlog这个工具无法识别binlog中的配置中的default-character-set=utf8这个指令。</p>
-<p>两个方法可以解决这个问题</p>
-<p>一是在MySQL的配置/etc/my.cnf中将default-character-set=utf8 修改为 character-set-server = utf8，但是这需要重启MySQL服务，如果你的MySQL服务正在忙，那这样的代价会比较大。</p>
-<p>二是用mysqlbinlog --no-defaults mysql-bin.000004 命令打开</p>
-<h1>没有权限查看binlog</h1>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">   %</span><span class="bash"> sudo chmod 777 mysql-bin.000001</span></span><br><span class="line"><span class="meta"> %</span><span class="bash"> /usr/<span class="built_in">local</span>/mysql-8.0.25-macos11-x86_64/bin/mysqlbinlog --no-defaults  /usr/<span class="built_in">local</span>/mysql/data/mysql-bin.000001        !6904</span></span><br><span class="line">/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=1*/;</span><br><span class="line">/*!50003 SET @OLD_COMPLETION_TYPE=@@COMPLETION_TYPE,COMPLETION_TYPE=0*/;</span><br><span class="line">DELIMITER /*!*/;</span><br><span class="line">mysqlbinlog: File &#x27;/usr/local/mysql/data/mysql-bin.000001&#x27; not found (OS errno 13 - Permission denied)</span><br><span class="line">ERROR: Could not open log file</span><br><span class="line">SET @@SESSION.GTID_NEXT= &#x27;AUTOMATIC&#x27; /* added by mysqlbinlog */ /*!*/;</span><br><span class="line">DELIMITER ;</span><br><span class="line"><span class="meta">#</span><span class="bash"> End of <span class="built_in">log</span> file</span></span><br><span class="line">/*!50003 SET COMPLETION_TYPE=@OLD_COMPLETION_TYPE*/;</span><br><span class="line">/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=0*/;</span><br></pre></td></tr></table></figure>
-
-          
+          binlog踩坑日记
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/03/10/binlog%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
