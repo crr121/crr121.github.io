@@ -259,6 +259,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小秋的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/" itemprop="url">链表的反转.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-12-09T19:46:22+08:00">
+                2024-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/" class="leancloud_visitors" data-flag-title="链表的反转.md">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="描述">描述</h2>
+<p>给定一个单链表的头结点pHead(该头节点是有值的，比如在下图，它的val是1)，长度为n，反转该链表后，返回新链表的表头。</p>
+<p>数据范围： 0≤n≤10000≤<em>n</em>≤1000</p>
+<p>要求：空间复杂度 O(1)<em>O</em>(1) ，时间复杂度 O(n)<em>O</em>(<em>n</em>) 。</p>
+<p>如当输入链表{1,2,3}时，</p>
+<p>经反转后，原链表变为{3,2,1}，所以对应的输出为{3,2,1}。</p>
+<p>以上转换过程如下图所示：</p>
+<p><img src="https://uploadfiles.nowcoder.com/images/20211014/423483716_1634206291971/4A47A0DB6E60853DEDFCFDF08A5CA249" alt="img"></p>
+<h2 id="示例1">示例1</h2>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;1,2,3&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>返回值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;3,2,1&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<h2 id="示例2">示例2</h2>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>返回值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">空链表则输出空                 </span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pre := &amp;ListNode&#123;&#125; 不能采用&amp;方式声明变量，这样会默认初始val为<span class="number">0</span>，从而导致反转的链表为<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> pre *ListNode </span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> . <span class="string">&quot;nc_tools&quot;</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * type ListNode struct&#123;</span></span><br><span class="line"><span class="comment"> *   Val int</span></span><br><span class="line"><span class="comment"> *   Next *ListNode</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @param head ListNode类 </span></span><br><span class="line"><span class="comment"> * @return ListNode类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReverseList</span><span class="params">( head *ListNode )</span> *<span class="title">ListNode</span></span> &#123;</span><br><span class="line">   cur := head</span><br><span class="line">   <span class="keyword">var</span> pre *ListNode</span><br><span class="line"><span class="comment">//    pre := &amp;ListNode&#123;&#125;</span></span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> cur == <span class="literal">nil</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pre</span><br><span class="line">    &#125;</span><br><span class="line">    cur_next := cur.Next</span><br><span class="line">    cur.Next = pre</span><br><span class="line">    pre = cur</span><br><span class="line">    cur = cur_next</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">作者：offer快来~~~</span><br><span class="line">链接：https:<span class="comment">//www.nowcoder.com/discuss/695722039553859584</span></span><br><span class="line">来源：牛客网</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">在 Go 语言中，`pre := &amp;ListNode&#123;&#125;` 和 `var pre *ListNode` 是两种不同的变量声明和初始化方式，它们的主要区别在于变量的初始化状态和内存分配。下面详细解释这两种方式的区别：</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 1. 语法和初始化</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- **`pre := &amp;ListNode&#123;&#125;`**</span><br><span class="line">  - 这行代码声明并初始化了一个指向 `ListNode` 类型的指针 `pre`。</span><br><span class="line">  - `&amp;ListNode&#123;&#125;` 创建了一个新的 `ListNode` 实例，并返回其地址，因此 `pre` 将指向这个新创建的实例。</span><br><span class="line">  - 此时，`pre` 指向的 `ListNode` 的所有字段都被初始化为该类型的零值（例如，整数字段为 0，指针字段为 `nil`）。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- **`var pre *ListNode`**</span><br><span class="line">  - 这行代码声明了一个指向 `ListNode` 类型的指针 `pre`，但没有进行初始化。</span><br><span class="line">  - `pre` 的初始值为 `nil`，表示它不指向任何有效的内存地址。</span><br><span class="line">  - 你需要在后续代码中手动为 `pre` 分配内存，例如使用 `pre = &amp;ListNode&#123;&#125;` 或 `pre = new(ListNode)`。</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 2. 内存分配</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- **`pre := &amp;ListNode&#123;&#125;`**</span><br><span class="line">  - 立即在堆上分配内存，并初始化一个 `ListNode` 实例。</span><br><span class="line">  - `pre` 指向这个实例，可以直接使用。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- **`var pre *ListNode`**</span><br><span class="line">  - 不进行任何内存分配，`pre` 初始为 `nil`，表示没有指向任何有效的对象。</span><br><span class="line">  - 在使用 `pre` 之前，必须先分配内存并确保它指向一个有效的 `ListNode` 实例。</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 3. 使用示例</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```go</span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">type ListNode struct &#123;</span><br><span class="line">    Value int</span><br><span class="line">    Next  *ListNode</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    // 使用 &amp;ListNode&#123;&#125; 创建并初始化</span><br><span class="line">    pre := &amp;ListNode&#123;Value: 1&#125;</span><br><span class="line">    fmt.Println(pre.Value) // 输出: 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // 使用 var 声明指针</span><br><span class="line">    var pre2 *ListNode</span><br><span class="line">    fmt.Println(pre2) // 输出: &lt;nil&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // 需要先分配内存</span><br><span class="line">    pre2 = &amp;ListNode&#123;Value: 2&#125;</span><br><span class="line">    fmt.Println(pre2.Value) // 输出: 2</span><br><span class="line">&#125;</span><br><span class="line">```</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 总结</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- **`pre := &amp;ListNode&#123;&#125;`**: 声明并初始化一个指向新创建的 `ListNode` 实例的指针，立即分配内存。</span><br><span class="line">- **`var pre *ListNode`**: 声明一个指向 `ListNode` 的指针，但不初始化，初始值为 `nil`，需要后续手动分配内存。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">选择哪种方式取决于你的具体需求。如果你希望立即创建并使用一个节点，使用 `&amp;ListNode&#123;&#125;` 是更直接的选择；如果你希望先声明指针，稍后再初始化，则可以使用 `var pre *ListNode`。</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/11/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84%E5%85%BB%E6%88%90%E7%B3%BB%E7%AC%AC%E4%B8%80%E5%BC%B9-md/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1593,173 +1761,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/10/bug%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小秋的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2022/03/10/bug%E8%AE%B0%E5%BD%95/" itemprop="url">bug记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-10T12:08:34+08:00">
-                2022-03-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bug/" itemprop="url" rel="index">
-                    <span itemprop="name">bug</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2022/03/10/bug%E8%AE%B0%E5%BD%95/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2022/03/10/bug%E8%AE%B0%E5%BD%95/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2022/03/10/bug%E8%AE%B0%E5%BD%95/" class="leancloud_visitors" data-flag-title="bug记录">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          bug
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2022/03/10/bug%E8%AE%B0%E5%BD%95/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1814,7 +1815,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
