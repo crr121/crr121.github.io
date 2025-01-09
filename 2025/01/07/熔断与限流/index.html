@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在分布式系统追求高可用的背景下，熔断、限流和降级这三个重要的策略可以称得上三大利器。 熔断（Circuit Breaker）：熔断是一种防止故障扩散的策略。当一个服务出现故障或超时，熔断器会打开并快速失败，拒绝后续的请求，避免请求堆积和资源耗尽。熔断器会暂时屏蔽该服务，并在一段时间后尝试恢复。熔断器的状态变化可用于监控系统健康和提供告警信息。 限流（Rate Limiting）：限流是一种控制系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="熔断与限流和降级">
+<meta property="og:url" content="http://example.com/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/index.html">
+<meta property="og:site_name" content="小秋的博客">
+<meta property="og:description" content="在分布式系统追求高可用的背景下，熔断、限流和降级这三个重要的策略可以称得上三大利器。 熔断（Circuit Breaker）：熔断是一种防止故障扩散的策略。当一个服务出现故障或超时，熔断器会打开并快速失败，拒绝后续的请求，避免请求堆积和资源耗尽。熔断器会暂时屏蔽该服务，并在一段时间后尝试恢复。熔断器的状态变化可用于监控系统健康和提供告警信息。 限流（Rate Limiting）：限流是一种控制系统">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/rongduan分布式级联效应.png">
+<meta property="og:image" content="http://example.com/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/rongduan.png">
+<meta property="article:published_time" content="2025-01-07T08:20:36.000Z">
+<meta property="article:modified_time" content="2025-01-09T04:21:59.362Z">
+<meta property="article:author" content="Joy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/rongduan分布式级联效应.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2025/01/07/熔断与限流/"/>
+
+
+
+
+
+  <title>熔断与限流和降级 | 小秋的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小秋的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小秋的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">熔断与限流和降级</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2025-01-07T16:20:36+08:00">
+                2025-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/" class="leancloud_visitors" data-flag-title="熔断与限流和降级">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在分布式系统追求高可用的背景下，熔断、限流和降级这三个重要的策略可以称得上三大利器。</p>
+<p>熔断（Circuit Breaker）：熔断是一种防止故障扩散的策略。当一个服务出现故障或超时，熔断器会打开并快速失败，拒绝后续的请求，避免请求堆积和资源耗尽。熔断器会暂时屏蔽该服务，并在一段时间后尝试恢复。熔断器的状态变化可用于监控系统健康和提供告警信息。</p>
+<p>限流（Rate Limiting）：限流是一种控制系统请求流量的策略。通过设置一个请求速率阈值，限流可以限制每个客户端或用户在特定时间内的请求次数。这样可以防止过多的请求涌入系统，保护系统免受过载和压力冲击。限流可以平滑流量，避免系统突发流量的影响。</p>
+<p>降级（Fallback）：降级是一种在面对特殊业务或异常情况时保持系统可用的策略。当服务不可用时，降级服务会代替提供一些基本功能或返回预设的默认值，以确保系统依然能够提供有限的功能或服务；又或者某些特定活动场景（例如：双十一）下优先保障计算资源投入到 业务倾向的服务，降级边缘服务。</p>
+<h1>熔断</h1>
+<h2 id="什么是熔断">什么是熔断</h2>
+<blockquote>
+<p>词典解释：保险丝烧断 保险丝也被称为熔断器。</p>
+<p>在90年代很多电闸都有保险丝，现在都是空气开关，当电压出现短路问题时，保险丝过热，因为是铅丝熔点低于铜铁，所以短路造成线路温度升高，导致铅丝融化，线路断开。此刻电路主动断开，我们的电器就会受到到保护。否则，可能造成火灾等严重后果。</p>
+<p>保险丝就是一个自我保护装置，保护整个电路。此概念被引入多个行业，我们要了解的是分布式系统中的熔断。</p>
+</blockquote>
+<p>熔断是一种防止故障扩散的策略。当一个服务出现故障或超时，熔断器会打开并快速失败，拒绝后续的请求，避免请求堆积和资源耗尽。熔断器会暂时屏蔽该服务，并在一段时间后尝试恢复。熔断器的状态变化可用于监控系统健康和提供告警信息。</p>
+<p>对于服务本身来说还是针对上游或者下游？</p>
+<p>分布式系统？</p>
+<p>在分布式架构中，一个服务通常会与多个外部服务进行交互，这些外部服务可能是RPC接口、<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/tencentdb-catalog?from_column=20065&amp;from=20065">数据库</a>、第三方API等。例如，在支付过程中，可能需要调用银联提供的API；而查询某个商品的价格，则可能需要进行营销活动查询。然而，除了自身服务外，依赖的外部服务的稳定性是无法绝对保证。</p>
+<p>当依赖的第三方服务出现不稳定的情况时，例如三方<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cvm/?from_column=20065&amp;from=20065">服务器</a>过载，会导致服务自身调用第三方服务的响应时间也变长，甚者形成级联效应。这样一来，服务自身的线程可能会积压，最终可能耗尽业务自身的线程池，导致服务本身变得不可用。</p>
+<p>熔断（Circuit Breaker）就是应对这种三方服务不稳定的设计，它可以帮助系统在出现问题时保持高可用，防止故障进一步扩散，同时也能在一段时间后重新尝试恢复正常操作。避免局部不稳定因素导致整个分布式系统的雪崩。作为保护服务自身的手段，通常在<strong>客户端</strong>（调用端）进行配置。</p>
+<p>为什么需要熔断</p>
+<h2 id="为什么需要熔断">为什么需要熔断</h2>
+<p>注：这种设计也是典型的 快速失败原则（Fail-Fast Principle） 的应用。强调在面对错误或异常情况时，系统应该尽早地检测并快速失败，而不是继续执行可能导致更严重后果的操作。这个原则的目的是尽早发现问题并及时处理，避免故障进一步扩大，从而提高系统的稳定性和可靠性。</p>
+<p>在高可用设计中，除了流控外，对分布式系统调用链路中不稳定的资源(比如RPC服务等)进行熔断降级也是保障高可用的重要措施之一。现在的分布式架构中一个服务常常会调用第三方服务，这个第三方服务可能是另外的一个RPC接口、数据库，或者第三方 API 等等。例如，支付的时候，可能需要远程调用银联提供的 API；查询某个商品的价格，可能需要进行数据库查询。然而，除了自身服务外，依赖的外部服务的稳定性是不能绝对保证的。如果依赖的第三方服务出现了不稳定的情况，比如请求的响应时间变长，那么服务自身调用第三方服务的响应时间也会响应变长，也就是级联效应，服务自身的线程可能会产生堆积，最终可能耗尽业务自身的线程池，最终服务本身也变得不可用。下图是一个很抽象且经典的分布式架构中的服务分布图：</p>
+<img src="/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/rongduan分布式级联效应.png" alt="rongduan分布式级联效应" style="zoom:50%;">
+<p>现代微服务架构基本都是分布式的，整个分布式系统由非常多的微服务组成。不同服务之间相互调用，组成复杂的调用链路。前面描述的问题在分布式链路调用中会产生放大的效果。整个复杂链路中的某一环如果不稳定，就可能会层层级联，最终可能导致整个链路全部挂掉。因此我们需要对不稳定的 <strong>弱依赖服务调用</strong> 进行 <strong>熔断降级</strong>，暂时切断不稳定的服务调用，避免局部不稳定因素导致整个分布式系统的雪崩。熔断降级作为保护服务自身的手段，通常在客户端（调用端）进行配置。</p>
+<h2 id="熔断器的状态">熔断器的状态</h2>
+<p>熔断器模式中最关键的设计在于熔断器的三种状态：</p>
+<ul>
+<li>Closed状态：来自应用程序的请求被 Proxy 操作。Proxy 维护最近故障次数的计数，如果对操作的调用不成功，Proxy 会增加这个计数。如果在给定的时间段内最近故障的次数超过了指定的阈值，Proxy 将进入Open状态。此时，Proxy 启动一个超时计时器，当计时器到达阈值时，Proxy 将进入Half-Open状态。（这里 Proxy 代指 Resilience4j、Sentinel、Hystrix类似框架）</li>
+<li>Open状态：来自应用程序的请求立即失败，并向应用程序返回异常。</li>
+<li>Half-Open状态：应用程序允许有限数量的请求通过并调用操作。如果这些请求成功，假定之前导致失败的故障已经修复，将切换到Closed状态（故障计数器被重置）。如果任何请求失败，会认为故障仍然存在，因此它会回退到Open状态，并重新启动超时计时器，为系统提供进一步的时间来从故障中恢复。。</li>
+</ul>
+<img src="/2025/01/07/%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/rongduan.png" alt="rongduan" style="zoom:50%;">
+<h2 id="触发条件">触发条件</h2>
+<h2 id="熔断策略">熔断策略</h2>
+<h2 id="熔断恢复">熔断恢复</h2>
+<h2 id="熔断一般在哪里配置">熔断一般在哪里配置</h2>
+<p>客户端</p>
+<h2 id="熔断机制是保护谁">熔断机制是保护谁</h2>
+<p>保护自己</p>
+<p>熔断降级作为保护服务自身的手段，通常在客户端（调用端）进行配置。</p>
+<h1>限流</h1>
+<h2 id="触发条件-2">触发条件</h2>
+<h2 id="限流策略">限流策略</h2>
+<h1>降级</h1>
+<h2 id="发生条件">发生条件</h2>
+<h2 id="降级策略">降级策略</h2>
+<h2 id="熔断和降级的区别">熔断和降级的区别</h2>
+<p><strong>降级是一种退而求其次的选择，而熔断却是整体不可用</strong></p>
+<p>**熔断时可能会调用降级机制，而降级时通常不会调用熔断机制。**因为熔断是从全局出发，为了保证系统稳定性而停用服务，而降级是退而求其次，提供一种保底的解决方案，所以它们的归属关系是不同（熔断 &gt; 降级）</p>
+<p>熔断和降级都是程序在我保护的一种机制，但二者在概念、触发条件、归属关系上都是不同的。熔断更偏向于全局视角的自我保护（机制），而降级则偏向于具体模块“退而请其次”的解决方案。</p>
+<h1>引用</h1>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7224059698910806074">https://juejin.cn/post/7224059698910806074</a></p>
+<p><a target="_blank" rel="noopener" href="https://sentinelguard.io/zh-cn/docs/golang/circuit-breaking.html#:~:text=%E7%86%94%E6%96%AD%E5%99%A8%E6%9C%89%E4%B8%89%E7%A7%8D%E7%8A%B6%E6%80%81,%E8%AE%BF%E9%97%AE%E4%B9%9F%E4%BC%9A%E8%A2%AB%E5%88%87%E6%96%AD%E3%80%82">https://sentinelguard.io/zh-cn/docs/golang/circuit-breaking.html#:~:text=熔断器有三种状态,访问也会被切断。</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/12/09/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC-md/" rel="next" title="链表的反转.md">
+                <i class="fa fa-chevron-left"></i> 链表的反转.md
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/" rel="prev" title="熔断、降级与限流">
+                熔断、降级与限流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.png"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%86%94%E6%96%AD"><span class="nav-number">1.1.</span> <span class="nav-text">什么是熔断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%86%94%E6%96%AD"><span class="nav-number">1.2.</span> <span class="nav-text">为什么需要熔断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E5%99%A8%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.</span> <span class="nav-text">熔断器的状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.4.</span> <span class="nav-text">触发条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E7%AD%96%E7%95%A5"><span class="nav-number">1.5.</span> <span class="nav-text">熔断策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%81%A2%E5%A4%8D"><span class="nav-number">1.6.</span> <span class="nav-text">熔断恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E4%B8%80%E8%88%AC%E5%9C%A8%E5%93%AA%E9%87%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">1.7.</span> <span class="nav-text">熔断一般在哪里配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BF%9D%E6%8A%A4%E8%B0%81"><span class="nav-number">1.8.</span> <span class="nav-text">熔断机制是保护谁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">限流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6-2"><span class="nav-number">2.1.</span> <span class="nav-text">触发条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E6%B5%81%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.</span> <span class="nav-text">限流策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">降级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E7%94%9F%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">发生条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%8D%E7%BA%A7%E7%AD%96%E7%95%A5"><span class="nav-number">3.2.</span> <span class="nav-text">降级策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E5%92%8C%E9%99%8D%E7%BA%A7%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.</span> <span class="nav-text">熔断和降级的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">引用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Joy</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+-->
+
+
+
+        
+<div class="busuanzi-count">
+#  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'HRweYePU3amQ8Xl1CNSA7kTY-MdYXbMMI',
+        appKey: 'wtumgGjACSAvmgqL31vaKunI',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'HRweYePU3amQ8Xl1CNSA7kTY-MdYXbMMI')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'HRweYePU3amQ8Xl1CNSA7kTY-MdYXbMMI',
+                'X-LC-Key': 'wtumgGjACSAvmgqL31vaKunI',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) return;
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
