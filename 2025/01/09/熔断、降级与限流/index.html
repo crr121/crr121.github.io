@@ -88,8 +88,10 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/rongduan.png">
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/rongduanqi%E5%AE%9E%E7%8E%B0.png">
+<meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/熔断.png">
+<meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/linjie.png">
 <meta property="article:published_time" content="2025-01-09T08:11:30.000Z">
-<meta property="article:modified_time" content="2025-01-10T13:05:19.917Z">
+<meta property="article:modified_time" content="2025-01-13T08:02:36.361Z">
 <meta property="article:author" content="Joy">
 <meta property="article:tag" content="高阶">
 <meta name="twitter:card" content="summary">
@@ -410,7 +412,7 @@
 <ul>
 <li>用一个默认值来代替下游依赖服务</li>
 <li>返回异常页告知用户稍后再试</li>
-<li>调用其他服务来代替原来依赖的服务方</li>
+<li>调用其他服务来代替原来依赖的服务方∂</li>
 </ul>
 <p>不同的业务异常需要有不同的对策，需要根据服务本身的情况特点去考量。</p>
 <p>2）记录详细的日志：需要记录异常日志，判断熔断策略是否符合预期，万一不该熔断或者熔断时机与预期不符合这些都需要事后对熔断机制进行复盘，判断熔断状态的扭转是否符合预期等。</p>
@@ -418,14 +420,88 @@
 <p>4）注意三方服务耗时：有时候下游请求能够正常返回，但是耗时很长，这样也会导致自身服务的超时，那么这种情况同要个需要进行超时熔断处理。对于这种隐蔽的异常也需要关注，而不是单单只是那些异常错误码的返回导致的异常。所以需要关注整体服务的业务运行情况。</p>
 <h2 id="熔断是熔断的自己还是别人">熔断是熔断的自己还是别人</h2>
 <p>熔断的是自己与别人之间的保险丝：不再请求别人，即下游。熔断的是当前业务系统与依赖方之间的调用链路。</p>
+<img src="熔断.png" alt="熔断图" style="width: 70%; height: auto;">
 <h1>限流</h1>
 <h2 id="为什么要限流">为什么要限流</h2>
 <p>因为有些系统的资源有限无法承载那么大的QPS，所以需要对请求量进行限制，防止流量突增导致系统无法承受住流量的压力，进而导致系统瘫痪。为什么会导致系统瘫痪，因为可能因为响应延迟进而导致线程进程之间恶性竞争资源，导致系统异常，甚至陷入死循环导致系统瘫痪。因此限流对于系统来说至关重要。那么如何评估系统的承受的流量也是非常重要的，可以通过压测等手段去评估。</p>
 <h2 id="有哪些限流算法">有哪些限流算法</h2>
 <p>常见的限流算法有固定窗口算法，滑动窗口算法，令牌桶算法，漏桶算法</p>
 <p>固定窗口算法：固定窗口算法就是固定每个时间窗口内限制请求的数量，例如每秒的时间窗口内限制100个请求量。</p>
-<p>固定窗口算法的缺点就是每个时间窗口的流量不均匀，可能会导致某些相邻的时间窗口之间的流量突增，实际已经超过了系统的容量，但是却没有达到限流的阈值。</p>
+<p>固定窗口算法的缺点就是每个时间窗口的流量不均匀，可能会导致某些相邻的时间窗口临界值之间的流量突增，实际已经超过了系统的容量，但是却没有达到限流的阈值。</p>
 <p>滑动窗口算法：设置一个滑动窗口，计算该时间窗口的请求数量。滑动窗口算法相对于固定时间窗口算法而言，控制的粒度更加细致，可以防止流量突增导致实际请求量超过阈值的情况。</p>
+<h2 id="固定窗口限流算法">固定窗口限流算法</h2>
+<p><img src="linjie.png" alt="pic/linjie.png"></p>
+<h2 id="滑动窗口限流算法">滑动窗口限流算法</h2>
+<p>滑动窗口限流算法通过将单位时间分为多个小周期，分别记录每个 小周期内接口的访问次数，并根据滑动删除过期的小周期。可以缓解固定窗口临界值的问题。滑动窗口可以更加平缓的统计固定时间窗口的流量，减少临界值的峰值流量的问题。</p>
+<p>但是滑动窗口限流算法还有一个缺点是随着小周期的增多，那么需要原子性的统计整个时间窗口的流量是一个问题，需要尽可能的达到瞬时一致性。</p>
+<p>针对滑动窗口算法而言，格子周期分的越多，那么滑动窗口的滚动就越平滑，限流的统计就会越准确。</p>
+<p>但是并不是格子周期越多越好。需要根据业务的实际情况来确定格子周期的数量。针对高峰期的流量，</p>
+<h2 id="如何确定窗口大小以及格子周期数多少">如何确定窗口大小以及格子周期数多少</h2>
+<p>滑动窗口限流算法的窗口大小需要根据实际业务流量进行灵活的调整。</p>
+<h3 id="根据实际流量特性设置窗口大小">根据实际流量特性设置窗口大小</h3>
+<p>流量的特性包括流量稳定性分析和流量峰值预测</p>
+<p>1、流量稳定性分析</p>
+<ul>
+<li>针对比较平稳的流量，可以选择相对较小的窗口，以实现更加精确的流量控制【控制的粒度可以比较细一点】</li>
+<li>针对流量波动比较大的流量，比如大促活动期间，可以考虑设置较大的窗口大小，以避免因窗口过小而导致的频繁限流【控制的粒度没那么细，要求没那么严格，可以允许部分突增的流量，从而保证系统稳定性，提升用户体验感】</li>
+</ul>
+<p>2、流量峰值预测</p>
+<ul>
+<li>可以通过对历史流量分析，预测峰值流量，在流量峰值期间，可能需要暂时增大窗口大小，以确保能够处理更多的请求。</li>
+<li>需要注意的是窗口的大小应该是动态的，可以根据实时流量进行动态调整。来确保系统可以最大限度地提供给更多的用户使用，使得系统资源利用最大化。</li>
+</ul>
+<h3 id="结合业务特性设置窗口大小">结合业务特性设置窗口大小</h3>
+<p>1、业务容忍度</p>
+<ul>
+<li>不同的业务对于延迟和吞吐量的容忍度不同，对于延迟敏感的业务，比如在线游戏，实时通信，需要设置较小的窗口大小以确保请求的及时处理。【这类业务对流量限制要求比较精确，不能出现由于请求量过大而导致时延的情况。所以需要比较精确的控制】</li>
+<li>对于吞吐量要求较高的业务，比如批量数据处理，数据备份，可以设置较大的窗口大小以提高系统的处理能力。【这类对于流量的控制要求没那么高，可以忍受一定的时延，所以可以扩大时间窗口，控制的粒度不用那么精确】</li>
+</ul>
+<h3 id="如何来设置这个阈值">如何来设置这个阈值</h3>
+<p>如果来设置这个阈值，参考因素有哪些</p>
+<p>1、系统的性能</p>
+<p>需要对系统的处理能力进行评估，包括系统的CPU,内存，磁盘IO等资源性能，以及系统的并发处理能力。其次可以通过性能测试和压力测试了解系统在不同流量下的表现，从而确定系统最大的处理能力。</p>
+<p>然后根据系统的性能表现设置一个合理的阈值，这个阈值应该能够确保系统在正常流量下稳定运行，同时在突发流量下也能够有一定的缓冲。这个阈值不能设置的过高也不能设置的过低，过高会导致系统过载，过低会限制系统的正常处理能力。</p>
+<p>2、业务场景</p>
+<p>根据业务场景的不同，也需要实时调整系统的阈值，比如针对电商系统的大促活动期间，由于用户请求量激增，需要设置较高的阈值来应对高并发的场景。而针对日常的业务运营的过程中，由于请求量相对稳定，可以设置一个较低的阈值来节约系统资源。</p>
+<h2 id="优缺点">优缺点</h2>
+<h3 id="优点">优点</h3>
+<ul>
+<li>解决临界问题</li>
+</ul>
+<p>滑动窗口限流算法可以比价平稳的控制流量，减少由于临界峰值超过阈值的情况。</p>
+<ul>
+<li>精细控制流量</li>
+</ul>
+<p>滑动窗口将一个时间窗口分为多个小窗口，通过窗口的滚动可以更加细粒度的控制流量，有助于在高并发场景下保持系统的稳定，同时确保关键业务得到及时处理。</p>
+<ul>
+<li>适应性强</li>
+</ul>
+<p>滑动窗口算法可以适应不同的流量模式，包括平稳流量和突发流量。通过调整窗口大小和阈值，可以灵活应对各种流量场景，确保系统的稳定性和可用性。</p>
+<ul>
+<li>实现简单</li>
+</ul>
+<p>相对于其他复杂的限流算法，比如令牌桶算法和漏桶算法，滑动窗口限流算法实现相对UI暗淡，不需要额外为维护状态信息，比如令牌桶中令牌数量或漏洞的流出速率，从而降低了系统的复杂性和维护成本。</p>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>实现相对复杂</li>
+</ul>
+<p>尽管滑动窗口限流算法基本原理相对简单，但是在实际运用中，为了实现精确的流量控制和高效的处理，可能需要设计复杂的数据结构和算法来维护窗口状态和请求计数。这增加了实现的的难度和复杂性。</p>
+<ul>
+<li>资源开销比较大</li>
+</ul>
+<p>由于需要维护多个小窗口的状态信息，并在窗口滑动时更新请求计数，滑动窗口限流算法可能需要占用较多的系统资源。这包括内存，CPU和磁盘io, 特别是在高并发情况下，资源开销可能会更加显著。</p>
+<ul>
+<li>对突发流量应对不足</li>
+</ul>
+<p>尽管滑动窗口限流算法可以平滑处理流量波动，但是面对突发流量是，如果请求超过了阈值，算法可能会拒绝部分用户请求，这个大大的降低了用户体验感，为了应对突发流量可能还需要结合其他限流策略或扩容方案来共同保障系统的稳定性。</p>
+<h1>三者区别</h1>
+<ul>
+<li>限流：只允许部分请求得到响应和服务，超过的部分将被拒绝服务、排队或等待、降级等处理。</li>
+<li>熔断：对向服务不能使用时开启自我保护停止调用，根据业务需要进行相应处理。</li>
+<li>降级：有限的服务资源下保留系统核心需求，关闭非核心功能，保障核心正常使用。</li>
+</ul>
+<h1>引用</h1>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43103529/article/details/132594352">https://blog.csdn.net/qq_43103529/article/details/132594352</a></p>
 
       
     </div>
@@ -603,7 +679,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">熔断的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">熔断机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E7%9A%84%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">开源的熔断机制的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%AE%9E%E9%99%85%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%AE%BE%E8%AE%A1%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E4%B8%80%E4%BA%9B%E4%BB%80%E4%B9%88%E5%9B%A0%E7%B4%A0"><span class="nav-number">1.4.</span> <span class="nav-text">在实际业务系统中设计熔断机制的时候需要考虑一些什么因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%98%AF%E7%86%94%E6%96%AD%E7%9A%84%E8%87%AA%E5%B7%B1%E8%BF%98%E6%98%AF%E5%88%AB%E4%BA%BA"><span class="nav-number">1.5.</span> <span class="nav-text">熔断是熔断的自己还是别人</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">限流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%99%90%E6%B5%81"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要限流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%93%AA%E4%BA%9B%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">有哪些限流算法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">熔断的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">熔断机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E7%9A%84%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">开源的熔断机制的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%AE%9E%E9%99%85%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%AE%BE%E8%AE%A1%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E4%B8%80%E4%BA%9B%E4%BB%80%E4%B9%88%E5%9B%A0%E7%B4%A0"><span class="nav-number">1.4.</span> <span class="nav-text">在实际业务系统中设计熔断机制的时候需要考虑一些什么因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E6%98%AF%E7%86%94%E6%96%AD%E7%9A%84%E8%87%AA%E5%B7%B1%E8%BF%98%E6%98%AF%E5%88%AB%E4%BA%BA"><span class="nav-number">1.5.</span> <span class="nav-text">熔断是熔断的自己还是别人</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">限流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%99%90%E6%B5%81"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要限流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%93%AA%E4%BA%9B%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">有哪些限流算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">固定窗口限流算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">滑动窗口限流算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9A%E7%AA%97%E5%8F%A3%E5%A4%A7%E5%B0%8F%E4%BB%A5%E5%8F%8A%E6%A0%BC%E5%AD%90%E5%91%A8%E6%9C%9F%E6%95%B0%E5%A4%9A%E5%B0%91"><span class="nav-number">2.5.</span> <span class="nav-text">如何确定窗口大小以及格子周期数多少</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E5%AE%9E%E9%99%85%E6%B5%81%E9%87%8F%E7%89%B9%E6%80%A7%E8%AE%BE%E7%BD%AE%E7%AA%97%E5%8F%A3%E5%A4%A7%E5%B0%8F"><span class="nav-number">2.5.1.</span> <span class="nav-text">根据实际流量特性设置窗口大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%90%88%E4%B8%9A%E5%8A%A1%E7%89%B9%E6%80%A7%E8%AE%BE%E7%BD%AE%E7%AA%97%E5%8F%A3%E5%A4%A7%E5%B0%8F"><span class="nav-number">2.5.2.</span> <span class="nav-text">结合业务特性设置窗口大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9D%A5%E8%AE%BE%E7%BD%AE%E8%BF%99%E4%B8%AA%E9%98%88%E5%80%BC"><span class="nav-number">2.5.3.</span> <span class="nav-text">如何来设置这个阈值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">2.6.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">三者区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">引用</span></a></li></ol></div>
             
 
           </div>
