@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/linjie.png">
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png">
 <meta property="article:published_time" content="2025-01-09T08:11:30.000Z">
-<meta property="article:modified_time" content="2025-01-14T02:21:24.300Z">
+<meta property="article:modified_time" content="2025-01-14T03:34:24.650Z">
 <meta property="article:author" content="Joy">
 <meta property="article:tag" content="高阶">
 <meta name="twitter:card" content="summary">
@@ -388,7 +388,8 @@
       
 
       
-        <p>在讲熔断，限流和降级之前，首先我们先探讨一下为什么会讨论三个话题，以及什么情况下需要用到他们，他们分别有什么样的适用场景</p>
+        <p>[TOC]</p>
+<p>在讲熔断，限流和降级之前，首先我们先探讨一下为什么会讨论三个话题，以及什么情况下需要用到他们，他们分别有什么样的适用场景</p>
 <p>如今大多数的系统都是分布式系统，并且需要承载高并发的请求，那么对于系统的可用性就至关重要。那么如何保证系统的高可用呢？对于一个分布式系统来说，在极端情况下会遇到什么问题？比如在双十一高峰的时候某个支付渠道不可用，并且这个支付渠道是比较重要的渠道，这个时候如果不做处理，那么可能会导致所有请求都一直阻塞等待这个支付渠道的相应，进而一直耗尽服务资源从而使得整个系统瘫痪。所以在这种情况下我们应该怎么做呢？又比如某个依赖的第三方银行只能承受的住100QPS如果双十一一下子上千万甚至上亿的QPS直接打到了下游，那么这个时候会使得整个系统超时，耗尽系统资源，最终使得系统无法正常提供服务。</p>
 <p>所以面对这些场景我们需要有一些自己的对策来防患于未然。首先需要了解的是熔断。</p>
 <h1>熔断</h1>
