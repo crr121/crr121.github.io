@@ -90,8 +90,9 @@
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/rongduanqi%E5%AE%9E%E7%8E%B0.png">
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/熔断.png">
 <meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/linjie.png">
+<meta property="og:image" content="http://example.com/2025/01/09/%E7%86%94%E6%96%AD%E3%80%81%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%99%90%E6%B5%81/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png">
 <meta property="article:published_time" content="2025-01-09T08:11:30.000Z">
-<meta property="article:modified_time" content="2025-01-13T08:02:36.361Z">
+<meta property="article:modified_time" content="2025-01-14T02:21:24.300Z">
 <meta property="article:author" content="Joy">
 <meta property="article:tag" content="高阶">
 <meta name="twitter:card" content="summary">
@@ -433,9 +434,10 @@
 <p><img src="linjie.png" alt="pic/linjie.png"></p>
 <h2 id="滑动窗口限流算法">滑动窗口限流算法</h2>
 <p>滑动窗口限流算法通过将单位时间分为多个小周期，分别记录每个 小周期内接口的访问次数，并根据滑动删除过期的小周期。可以缓解固定窗口临界值的问题。滑动窗口可以更加平缓的统计固定时间窗口的流量，减少临界值的峰值流量的问题。</p>
-<p>但是滑动窗口限流算法还有一个缺点是随着小周期的增多，那么需要原子性的统计整个时间窗口的流量是一个问题，需要尽可能的达到瞬时一致性。</p>
+<p>但是滑动窗口限流算法还有一个缺点是随着小周期的增多，那么需要原子性的统计整个时间窗口的流量是一个问题，需要尽可能的达到瞬时一致性,并且统计的过程也是需要耗时的。</p>
 <p>针对滑动窗口算法而言，格子周期分的越多，那么滑动窗口的滚动就越平滑，限流的统计就会越准确。</p>
-<p>但是并不是格子周期越多越好。需要根据业务的实际情况来确定格子周期的数量。针对高峰期的流量，</p>
+<p>但是并不是格子周期越多越好。需要根据业务的实际情况来确定格子周期的数量。</p>
+<p><img src="%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png" alt="pic/滑动窗口算法.png"></p>
 <h2 id="如何确定窗口大小以及格子周期数多少">如何确定窗口大小以及格子周期数多少</h2>
 <p>滑动窗口限流算法的窗口大小需要根据实际业务流量进行灵活的调整。</p>
 <h3 id="根据实际流量特性设置窗口大小">根据实际流量特性设置窗口大小</h3>
